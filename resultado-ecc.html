@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Resultados – Visitas e Apoio Presencial (PECs)</title>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card: #111827;
+            --muted: #94a3b8;
+            --text: #e5e7eb;
+            --accent: #22d3ee;
+            --danger: #ef4444;
+            --radius: 16px;
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        html,
+        body {
+            margin: 0
+        }
+
+        body {
+            font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans";
+            background: linear-gradient(135deg, #0b1025 0%, #0f172a 40%, #0b2530 100%);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 24px
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto
+        }
+
+        header {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-bottom: 12px
+        }
+
+        h1 {
+            font-size: 1.35rem;
+            margin: 0
+        }
+
+        .card {
+            background: linear-gradient(180deg, rgba(255, 255, 255, .04), rgba(0, 0, 0, .12));
+            border: 1px solid rgba(255, 255, 255, .08);
+            border-radius: var(--radius);
+            box-shadow: 0 6px 24px rgba(0, 0, 0, .35);
+            margin-bottom: 16px
+        }
+
+        .toolbar {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+            padding: 12px;
+            border-top: 1px solid rgba(255, 255, 255, .1)
+        }
+
+        .toolbar .grow {
+            flex: 1
+        }
+
+        .toolbar input {
+            max-width: 340px;
+            background: #0b1226;
+            border: 1px solid rgba(255, 255, 255, .1);
+            color: var(--text);
+            padding: 10px;
+            border-radius: 12px
+        }
+
+        select {
+            background: #0b1226;
+            border: 1px solid rgba(255, 255, 255, .1);
+            color: var(--text);
+            padding: 10px;
+            border-radius: 12px
+        }
+
+        .pill {
+            padding: 4px 8px;
+            border-radius: 999px;
+            background: #0c1a34;
+            border: 1px solid rgba(255, 255, 255, .12);
+            font-size: .78rem
+        }
+
+        .table-wrap {
+            overflow: auto
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 8px;
+            padding: 12px
+        }
+
+        thead th {
+            font-size: .8rem;
+            color: var(--muted);
+            text-align: left;
+            font-weight: 600;
+            padding: 0 12px
+        }
+
+        tbody tr {
+            background: #0b1226;
+            border: 1px solid rgba(255, 255, 255, .06)
+        }
+
+        tbody td {
+            padding: 12px;
+            border-top: 1px solid rgba(255, 255, 255, .06);
+            border-bottom: 1px solid rgba(255, 255, 255, .06)
+        }
+
+        tbody td:first-child {
+            border-left: 1px solid rgba(255, 255, 255, .06);
+            border-top-left-radius: 12px;
+            border-bottom-left-radius: 12px
+        }
+
+        tbody td:last-child {
+            border-right: 1px solid rgba(255, 255, 255, .06);
+            border-top-right-radius: 12px;
+            border-bottom-right-radius: 12px
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap
+        }
+
+        button,
+        .btn {
+            border: 0;
+            cursor: pointer;
+            border-radius: 12px;
+            padding: 10px 14px;
+            font-weight: 700
+        }
+
+        .btn {
+            display: inline-block;
+            text-decoration: none
+        }
+
+        .btn-secondary {
+            background: #0b1226;
+            color: var(--text);
+            border: 1px solid rgba(255, 255, 255, .15)
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: #fff
+        }
+
+        .empty {
+            text-align: center;
+            color: var(--muted);
+            padding: 20px;
+            border-top: 1px dashed rgba(255, 255, 255, .18)
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Resultados – Visitas e Apoio Presencial (PECs)</h1>
+            <div class="actions">
+                <!-- dentro do resultado-eecc.html -->
+                <a class="btn btn-secondary" href="./Formulario-ecc.html">Cadastrar novo</a>
+                <button id="printPage" class="btn-secondary">Imprimir</button>
+                <button id="exportCsv" class="btn-secondary">Exportar CSV (aba ativa)</button>
+            </div>
+        </header>
+
+        <!-- Abas simples -->
+        <nav class="actions" style="margin-bottom:10px">
+            <button class="btn-secondary" data-tab="visitas" aria-pressed="true">Visitas</button>
+            <button class="btn-secondary" data-tab="apoio" aria-pressed="false">Apoio Presencial</button>
+        </nav>
+
+        <!-- VISITAS -->
+        <section id="sec-visitas" class="card">
+            <div class="toolbar">
+                <div class="grow">
+                    <input id="v-search" type="search" placeholder="Filtrar por professor, escola ou tema..."
+                        aria-label="Filtro de busca" />
+                </div>
+                <select id="v-filterMonth" aria-label="Filtrar por mês">
+                    <option value="">Todos os meses</option>
+                </select>
+                <select id="v-filterSchool" aria-label="Filtrar por escola">
+                    <option value="">Todas as escolas</option>
+                </select>
+                <span id="v-counter" class="pill">0 visitas</span>
+            </div>
+            <div class="table-wrap">
+                <table aria-describedby="v-counter">
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Mês</th>
+                            <th>Professores PECs</th>
+                            <th>Escola</th>
+                            <th>Tema</th>
+                            <th>Observações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="v-tbody"></tbody>
+                </table>
+                <div id="v-empty" class="empty">Nenhuma visita cadastrada.</div>
+            </div>
+        </section>
+
+        <!-- APOIO -->
+        <section id="sec-apoio" class="card" style="display:none">
+            <div class="toolbar">
+                <div class="grow">
+                    <input id="a-search" type="search" placeholder="Filtrar por professor, escola ou tema..."
+                        aria-label="Filtro de busca" />
+                </div>
+                <select id="a-filterMonth" aria-label="Filtrar por mês">
+                    <option value="">Todos os meses</option>
+                </select>
+                <select id="a-filterSchool" aria-label="Filtrar por escola">
+                    <option value="">Todas as escolas</option>
+                </select>
+                <span id="a-counter" class="pill">0 apoios</span>
+            </div>
+            <div class="table-wrap">
+                <table aria-describedby="a-counter">
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Mês</th>
+                            <th>Professores PECs</th>
+                            <th>Escola</th>
+                            <th>Tema</th>
+                            <th>Observações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="a-tbody"></tbody>
+                </table>
+                <div id="a-empty" class="empty">Nenhum apoio presencial cadastrado.</div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // ===== Util =====
+        const $ = (s, scope = document) => scope.querySelector(s);
+        const $$ = (s, scope = document) => Array.from(scope.querySelectorAll(s));
+        const save = (k, d) => localStorage.setItem(k, JSON.stringify(d));
+        const load = (k, f) => { try { return JSON.parse(localStorage.getItem(k)) ?? f } catch { return f } };
+        const PT_BR_MESES = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
+        const fmt = {
+            date(iso) { if (!iso) return ""; const d = new Date(iso + 'T00:00:00'); const dd = String(d.getDate()).padStart(2, '0'); const mm = String(d.getMonth() + 1).padStart(2, '0'); const yy = d.getFullYear(); return `${dd}/${mm}/${yy}`; },
+            month(iso) { if (!iso) return ""; return PT_BR_MESES[new Date(iso + 'T00:00:00').getMonth()]; }
+        };
+
+        const K_VISITAS = 'visitas-pecs-v2';
+        const K_APOIO = 'apoio-presencial-v1';
+
+        // ===== Abas simples =====
+        const tabBtns = $$('nav [data-tab]');
+        const secVis = $('#sec-visitas');
+        const secApo = $('#sec-apoio');
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                tabBtns.forEach(b => b.setAttribute('aria-pressed', 'false'));
+                btn.setAttribute('aria-pressed', 'true');
+                const tab = btn.getAttribute('data-tab');
+                const vis = (tab === 'visitas');
+                secVis.style.display = vis ? '' : 'none';
+                secApo.style.display = vis ? 'none' : '';
+            });
+        });
+
+        // ===== Fábrica de módulo de leitura (só render e filtros) =====
+        function createReadModule(prefix, storageKey, labelPlural) {
+            const els = {
+                search: document.getElementById(prefix[0] + '-search'),
+                filterMonth: document.getElementById(prefix[0] + '-filterMonth'),
+                filterSchool: document.getElementById(prefix[0] + '-filterSchool'),
+                counter: document.getElementById(prefix[0] + '-counter'),
+                tbody: document.getElementById(prefix[0] + '-tbody'),
+                empty: document.getElementById(prefix[0] + '-empty')
+            };
+            function getState() { return load(storageKey, { items: [] }); }
+
+            function refreshSchoolFilter(state) {
+                const selected = els.filterSchool.value;
+                els.filterSchool.innerHTML = '<option value="">Todas as escolas</option>';
+                const escolas = [...new Set(state.items.map(x => (x.escola || '').trim()).filter(Boolean))].sort((a, b) => a.localeCompare(b));
+                escolas.forEach(es => {
+                    const opt = document.createElement('option');
+                    opt.value = es; opt.textContent = es; els.filterSchool.appendChild(opt);
+                });
+                if (selected) els.filterSchool.value = selected;
+            }
+
+            function initFilters(state) {
+                if (!els.filterMonth.dataset.ready) {
+                    PT_BR_MESES.forEach((m, i) => {
+                        const opt = document.createElement('option');
+                        opt.value = String(i + 1).padStart(2, '0'); opt.textContent = m; els.filterMonth.appendChild(opt);
+                    });
+                    els.filterMonth.dataset.ready = '1';
+                }
+                refreshSchoolFilter(state);
+            }
+
+            function escapeHtml(str) {
+                return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\"/g, '&quot;').replace(/'/g, '&#039;');
+            }
+
+            function render() {
+                const state = getState();
+                initFilters(state);
+
+                const q = (els.search.value || '').trim().toLowerCase();
+                const mm = els.filterMonth.value;    // "" ou "MM"
+                const es = (els.filterSchool.value || '').trim();
+
+                const rows = state.items.filter(it => {
+                    const matches = !q || [it.professores, it.escola, it.tema, it.obs].join(' ').toLowerCase().includes(q);
+                    const monthOk = !mm || (it.data && it.data.split('-')[1] === mm);
+                    const schoolOk = !es || it.escola === es;
+                    return matches && monthOk && schoolOk;
+                }).sort((a, b) => (a.data || '').localeCompare(b.data || ''));
+
+                els.tbody.innerHTML = '';
+                rows.forEach(it => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+          <td><span class="pill">${fmt.date(it.data)}</span></td>
+          <td>${fmt.month(it.data)}</td>
+          <td>${escapeHtml(it.professores || '')}</td>
+          <td>${escapeHtml(it.escola || '')}</td>
+          <td>${escapeHtml(it.tema || '')}</td>
+          <td>${escapeHtml(it.obs || '')}</td>`;
+                    els.tbody.appendChild(tr);
+                });
+
+                els.empty.style.display = rows.length ? 'none' : 'block';
+                els.counter.textContent = `${rows.length} ${labelPlural}`;
+                refreshSchoolFilter(state); // mantém opções atualizadas
+            }
+
+            // listeners
+            els.search.addEventListener('input', render);
+            els.filterMonth.addEventListener('change', render);
+            els.filterSchool.addEventListener('change', render);
+
+            // inicial
+            render();
+            return { render };
+        }
+
+        const modVis = createReadModule('visitas', K_VISITAS, 'visitas');
+        const modApo = createReadModule('apoio', K_APOIO, 'apoios');
+
+        // ===== Exportar CSV da aba ativa =====
+        function exportActiveToCSV() {
+            const visActive = $('#sec-visitas').style.display !== 'none';
+            const storageKey = visActive ? K_VISITAS : K_APOIO;
+            const prefix = visActive ? 'visitas' : 'apoio';
+            const state = load(storageKey, { items: [] });
+            if (!state.items.length) { alert('Não há dados para exportar nesta aba.'); return; }
+            const headers = ['Data', 'Mês', 'Professores', 'Escola', 'Tema', 'Observações'];
+            const rows = state.items
+                .sort((a, b) => (a.data || '').localeCompare(b.data || ''))
+                .map(it => [
+                    (it.data ? (() => { const d = new Date(it.data + 'T00:00:00'); return String(d.getDate()).padStart(2, '0') + '/' + String(d.getMonth() + 1).padStart(2, '0') + '/' + d.getFullYear(); })() : ''),
+                    (it.data ? ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"][new Date(it.data + 'T00:00:00').getMonth()] : ''),
+                    it.professores || '', it.escola || '', it.tema || '', it.obs || ''
+                ]);
+            const csv = [headers, ...rows].map(r => r.map(x => '"' + String(x).replace(/"/g, '""') + '"').join(',')).join('\n');
+            const blob = new Blob(["\ufeff" + csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob); const a = document.createElement('a');
+            a.href = url; a.download = `${prefix}.csv`; a.click(); URL.revokeObjectURL(url);
+        }
+
+        document.getElementById('exportCsv').addEventListener('click', exportActiveToCSV);
+        document.getElementById('printPage').addEventListener('click', () => window.print());
+    </script>
+</body>
+
+</html>

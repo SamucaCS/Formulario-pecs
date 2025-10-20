@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cadastro – Visitas e Apoio Presencial (PECs)</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #111827;
+      --muted: #94a3b8;
+      --text: #e5e7eb;
+      --accent: #22d3ee;
+      --accent-2: #10b981;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --radius: 16px;
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    html,
+    body {
+      margin: 0
+    }
+
+    body {
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans";
+      background: linear-gradient(135deg, #0b1025 0%, #0f172a 40%, #0b2530 100%);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 24px
+    }
+
+    .container {
+      max-width: 980px;
+      margin: 0 auto
+    }
+
+    header {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      margin-bottom: 16px
+    }
+
+    h1 {
+      font-size: 1.35rem;
+      margin: 0
+    }
+
+    .card {
+      background: linear-gradient(180deg, rgba(255, 255, 255, .04), rgba(0, 0, 0, .12));
+      border: 1px solid rgba(255, 255, 255, .08);
+      border-radius: var(--radius);
+      box-shadow: 0 6px 24px rgba(0, 0, 0, .35);
+      margin-bottom: 16px
+    }
+
+    form {
+      padding: 16px
+    }
+
+    .grid {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(12, 1fr)
+    }
+
+    .col-6 {
+      grid-column: span 6
+    }
+
+    .col-3 {
+      grid-column: span 3
+    }
+
+    .col-12 {
+      grid-column: span 12
+    }
+
+    @media (max-width:860px) {
+
+      .col-6,
+      .col-3 {
+        grid-column: span 12
+      }
+    }
+
+    label {
+      display: block;
+      font-size: .88rem;
+      color: var(--muted);
+      margin: 2px 0 6px
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      background: #0b1226;
+      border: 1px solid rgba(255, 255, 255, .1);
+      color: var(--text);
+      padding: 12px;
+      border-radius: 12px;
+      outline: none
+    }
+
+    textarea {
+      min-height: 70px;
+      resize: vertical
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 10px
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-weight: 700
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #03222c
+    }
+
+    .btn-secondary {
+      background: #0b1226;
+      color: var(--text);
+      border: 1px solid rgba(255, 255, 255, .15)
+    }
+
+    .ok {
+      display: none;
+      margin: 10px 16px 18px;
+      color: #10b981
+    }
+
+    .links {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin: 6px 0 18px
+    }
+
+    a.btn {
+      display: inline-block;
+      text-decoration: none
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <h1>Cadastro – Visitas e Apoio Presencial (PECs)</h1>
+      <div class="links">
+        <!-- dentro do Formulario-eecc.html -->
+        <a class="btn btn-secondary" href="./resultado-ecc.html">Ver resultados</a>
+
+      </div>
+    </header>
+
+    <!-- VISITAS -->
+    <section class="card" aria-labelledby="titulo-visitas">
+      <form id="form-visitas">
+        <h2 id="titulo-visitas" style="margin:0 0 8px;font-size:1rem">Nova visita</h2>
+        <div class="grid">
+          <div class="col-6">
+            <label for="v-prof">Professores PECs</label>
+            <input id="v-prof" name="professores" type="text" placeholder="Ex.: Ana Silva; João Santos" required />
+          </div>
+          <div class="col-3">
+            <label for="v-data">Data</label>
+            <input id="v-data" name="data" type="date" required />
+          </div>
+          <div class="col-3">
+            <label for="v-escola">Escola</label>
+            <input id="v-escola" name="escola" type="text" placeholder="Ex.: E.E. Alberto Santos" required />
+          </div>
+          <div class="col-12">
+            <label for="v-tema">Tema abordado</label>
+            <input id="v-tema" name="tema" type="text" placeholder="Ex.: Avaliação diagnóstica; Planejamento de aula"
+              required />
+          </div>
+          <div class="col-12">
+            <label for="v-obs">Observações (opcional)</label>
+            <textarea id="v-obs" name="obs"
+              placeholder="Registre detalhes importantes, encaminhamentos, responsáveis, etc."></textarea>
+          </div>
+        </div>
+        <div class="actions">
+          <button type="submit" class="btn-primary">Adicionar visita</button>
+          <button type="reset" class="btn-secondary">Limpar</button>
+        </div>
+        <p class="ok" id="ok-visitas">✓ Visita salva. <a class="btn btn-secondary" href="/resultados-pecs">Ver
+            resultados</a></p>
+      </form>
+    </section>
+
+    <!-- APOIO PRESENCIAL -->
+    <section class="card" aria-labelledby="titulo-apoio">
+      <form id="form-apoio">
+        <h2 id="titulo-apoio" style="margin:0 0 8px;font-size:1rem">Novo apoio presencial</h2>
+        <div class="grid">
+          <div class="col-6">
+            <label for="a-prof">Professores PECs</label>
+            <input id="a-prof" name="professores" type="text" placeholder="Ex.: Ana Silva; João Santos" required />
+          </div>
+          <div class="col-3">
+            <label for="a-data">Data</label>
+            <input id="a-data" name="data" type="date" required />
+          </div>
+          <div class="col-3">
+            <label for="a-escola">Escola</label>
+            <input id="a-escola" name="escola" type="text" placeholder="Ex.: E.E. Alberto Santos" required />
+          </div>
+          <div class="col-12">
+            <label for="a-tema">Tema abordado</label>
+            <input id="a-tema" name="tema" type="text" placeholder="Ex.: Tecnologias educativas; Apoio em sala"
+              required />
+          </div>
+          <div class="col-12">
+            <label for="a-obs">Observações (opcional)</label>
+            <textarea id="a-obs" name="obs"
+              placeholder="Detalhes do apoio presencial, responsáveis, encaminhamentos, etc."></textarea>
+          </div>
+        </div>
+        <div class="actions">
+          <button type="submit" class="btn-primary">Adicionar apoio</button>
+          <button type="reset" class="btn-secondary">Limpar</button>
+        </div>
+        <p class="ok" id="ok-apoio">✓ Apoio salvo. <a class="btn btn-secondary" href="/resultados-pecs">Ver
+            resultados</a></p>
+      </form>
+    </section>
+  </div>
+
+  <script>
+    // ===== Util =====
+    const save = (k, d) => localStorage.setItem(k, JSON.stringify(d));
+    const load = (k, f) => { try { return JSON.parse(localStorage.getItem(k)) ?? f } catch { return f } };
+    const uuid = () => (crypto?.randomUUID?.() || 'id-' + Date.now() + '-' + Math.random().toString(16).slice(2));
+
+    // ===== Chaves (iguais às usadas na página de resultados) =====
+    const K_VISITAS = 'visitas-pecs-v2';
+    const K_APOIO = 'apoio-presencial-v1';
+
+    // ===== Inicializa estados vazios se não houver =====
+    if (!load(K_VISITAS, null)) save(K_VISITAS, { items: [] });
+    if (!load(K_APOIO, null)) save(K_APOIO, { items: [] });
+
+    // ===== Handlers de submit =====
+    function handleSubmit(formId, storageKey, okMsgId) {
+      const form = document.getElementById(formId);
+      const ok = document.getElementById(okMsgId);
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const fd = new FormData(form);
+        const state = load(storageKey, { items: [] });
+        state.items.push({
+          id: uuid(),
+          professores: (fd.get('professores') || '').toString().trim(),
+          data: (fd.get('data') || '').toString(),
+          escola: (fd.get('escola') || '').toString().trim(),
+          tema: (fd.get('tema') || '').toString().trim(),
+          obs: (fd.get('obs') || '').toString().trim()
+        });
+        save(storageKey, state);
+        form.reset();
+        ok.style.display = 'block';
+        setTimeout(() => { ok.style.display = 'none'; }, 4000);
+      });
+    }
+
+    handleSubmit('form-visitas', K_VISITAS, 'ok-visitas');
+    handleSubmit('form-apoio', K_APOIO, 'ok-apoio');
+  </script>
+</body>
+
+</html>
