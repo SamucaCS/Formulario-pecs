@@ -166,9 +166,8 @@
     <header>
       <h1>Cadastro – Visitas e Apoio Presencial (PECs)</h1>
       <div class="links">
-        <!-- dentro do Formulario-eecc.html -->
+        <!-- use o mesmo arquivo de resultados que você já tem -->
         <a class="btn btn-secondary" href="./resultado-ecc.html">Ver resultados</a>
-
       </div>
     </header>
 
@@ -204,8 +203,9 @@
           <button type="submit" class="btn-primary">Adicionar visita</button>
           <button type="reset" class="btn-secondary">Limpar</button>
         </div>
-        <p class="ok" id="ok-visitas">✓ Visita salva. <a class="btn btn-secondary" href="/resultados-pecs">Ver
-            resultados</a></p>
+        <p class="ok" id="ok-visitas">✓ Visita salva.
+          <a id="ok-link-visitas" class="btn btn-secondary" href="./resultado-ecc.html?tab=visitas">Ver resultados</a>
+        </p>
       </form>
     </section>
 
@@ -241,8 +241,9 @@
           <button type="submit" class="btn-primary">Adicionar apoio</button>
           <button type="reset" class="btn-secondary">Limpar</button>
         </div>
-        <p class="ok" id="ok-apoio">✓ Apoio salvo. <a class="btn btn-secondary" href="/resultados-pecs">Ver
-            resultados</a></p>
+        <p class="ok" id="ok-apoio">✓ Apoio salvo.
+          <a id="ok-link-apoio" class="btn btn-secondary" href="./resultado-ecc.html?tab=apoio">Ver resultados</a>
+        </p>
       </form>
     </section>
   </div>
@@ -253,18 +254,25 @@
     const load = (k, f) => { try { return JSON.parse(localStorage.getItem(k)) ?? f } catch { return f } };
     const uuid = () => (crypto?.randomUUID?.() || 'id-' + Date.now() + '-' + Math.random().toString(16).slice(2));
 
-    // ===== Chaves (iguais às usadas na página de resultados) =====
+    // ===== Chaves =====
     const K_VISITAS = 'visitas-pecs-v2';
     const K_APOIO = 'apoio-presencial-v1';
 
-    // ===== Inicializa estados vazios se não houver =====
+    // ===== Inicialização =====
     if (!load(K_VISITAS, null)) save(K_VISITAS, { items: [] });
     if (!load(K_APOIO, null)) save(K_APOIO, { items: [] });
 
-    // ===== Handlers de submit =====
-    function handleSubmit(formId, storageKey, okMsgId) {
+    // ===== Handler genérico de submit =====
+    function handleSubmit(formId, storageKey, okMsgId, okLinkId, tabName) {
       const form = document.getElementById(formId);
       const ok = document.getElementById(okMsgId);
+      const link = document.getElementById(okLinkId);
+
+      // Garante link correto (mesma pasta) e aba
+      const resultsUrl = new URL('./resultado-ecc.html', window.location.href);
+      resultsUrl.searchParams.set('tab', tabName);
+      link.setAttribute('href', resultsUrl.pathname + resultsUrl.search);
+
       form.addEventListener('submit', (e) => {
         e.preventDefault();
         const fd = new FormData(form);
@@ -280,12 +288,14 @@
         save(storageKey, state);
         form.reset();
         ok.style.display = 'block';
+        // (opcional) foco no link para acessibilidade/atalho rápido
+        link.focus();
         setTimeout(() => { ok.style.display = 'none'; }, 4000);
       });
     }
 
-    handleSubmit('form-visitas', K_VISITAS, 'ok-visitas');
-    handleSubmit('form-apoio', K_APOIO, 'ok-apoio');
+    handleSubmit('form-visitas', K_VISITAS, 'ok-visitas', 'ok-link-visitas', 'visitas');
+    handleSubmit('form-apoio', K_APOIO, 'ok-apoio', 'ok-link-apoio', 'apoio');
   </script>
 </body>
 
