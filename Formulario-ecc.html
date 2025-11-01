@@ -15,7 +15,7 @@
       --accent-2: #10b981;
       --danger: #ef4444;
       --warning: #f59e0b;
-      --radius: 16px;
+      --radius: 16px
     }
 
     * {
@@ -166,7 +166,6 @@
     <header>
       <h1>Cadastro – Visitas e Apoio Presencial (PECs)</h1>
       <div class="links">
-        <!-- use o mesmo arquivo de resultados que você já tem -->
         <a class="btn btn-secondary" href="./resultado-ecc.html">Ver resultados</a>
       </div>
     </header>
@@ -249,53 +248,78 @@
   </div>
 
   <script>
-    // ===== Util =====
-    const save = (k, d) => localStorage.setItem(k, JSON.stringify(d));
-    const load = (k, f) => { try { return JSON.parse(localStorage.getItem(k)) ?? f } catch { return f } };
-    const uuid = () => (crypto?.randomUUID?.() || 'id-' + Date.now() + '-' + Math.random().toString(16).slice(2));
+    // === Config Supabase (seu projeto)
+    const SUPABASE_URL = 'https://xdaanjevbvgqwasjqcew.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkYWFuamV2YnZncXdhc2pxY2V3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIwMDY4NDEsImV4cCI6MjA3NzU4Mjg0MX0.Pf-o3Wa9dLswwd4O8QFcH2v6oXHbvsSXrjIKJMUOz7E';
 
-    // ===== Chaves =====
-    const K_VISITAS = 'visitas-pecs-v2';
-    const K_APOIO = 'apoio-presencial-v1';
+    function deviceType() { return /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) ? 'mobile' : 'desktop'; }
 
-    // ===== Inicialização =====
-    if (!load(K_VISITAS, null)) save(K_VISITAS, { items: [] });
-    if (!load(K_APOIO, null)) save(K_APOIO, { items: [] });
+    // ====== ENVIO COM LOG DETALHADO ======
+    async function enviar(payload) {
+      console.log('Payload enviado:', payload); // << vê exatamente o JSON
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/pec_submissions`, {
+        method: 'POST',
+        headers: {
+          'apikey': SUPABASE_ANON_KEY,
+          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=representation'
+        },
+        body: JSON.stringify(payload)
+      });
 
-    // ===== Handler genérico de submit =====
-    function handleSubmit(formId, storageKey, okMsgId, okLinkId, tabName) {
+      const text = await res.text();
+      if (!res.ok) {
+        console.error('STATUS:', res.status);
+        console.error('HEADERS:', Object.fromEntries(res.headers.entries()));
+        console.error('BODY:', text);
+        throw new Error(text || `HTTP ${res.status}`);
+      }
+      try { return JSON.parse(text); } catch { return text; }
+    }
+
+    // ====== MONTA O PAYLOAD E ENVIA ======
+    function wireForm(formId, okId, okLinkId, tabName, prefixo) {
       const form = document.getElementById(formId);
-      const ok = document.getElementById(okMsgId);
       const link = document.getElementById(okLinkId);
 
-      // Garante link correto (mesma pasta) e aba
       const resultsUrl = new URL('./resultado-ecc.html', window.location.href);
       resultsUrl.searchParams.set('tab', tabName);
       link.setAttribute('href', resultsUrl.pathname + resultsUrl.search);
 
-      form.addEventListener('submit', (e) => {
+      form.addEventListener('submit', async (e) => {
         e.preventDefault();
         const fd = new FormData(form);
-        const state = load(storageKey, { items: [] });
-        state.items.push({
-          id: uuid(),
-          professores: (fd.get('professores') || '').toString().trim(),
-          data: (fd.get('data') || '').toString(),
-          escola: (fd.get('escola') || '').toString().trim(),
-          tema: (fd.get('tema') || '').toString().trim(),
-          obs: (fd.get('obs') || '').toString().trim()
-        });
-        save(storageKey, state);
-        form.reset();
-        ok.style.display = 'block';
-        // (opcional) foco no link para acessibilidade/atalho rápido
-        link.focus();
-        setTimeout(() => { ok.style.display = 'none'; }, 4000);
+
+        const payload = {
+          school_id: null,
+          school_name: (fd.get('escola') || '').toString().trim(),
+          pec_name: (fd.get('professores') || '').toString().trim(),
+          supervisor_name: null,
+          role: null,
+          visit_date: (fd.get('data') || '').toString(),     // YYYY-MM-DD
+          period: null,                                    // opcional
+          activity_type: `${prefixo}: ${(fd.get('tema') || '').toString().trim()}`,
+          notes: (fd.get('obs') || '').toString().trim() || null,
+          device: deviceType(),
+          attachments: []
+        };
+
+        try {
+          await enviar(payload);
+          const ok = document.getElementById(okId);
+          ok.style.display = 'block';
+          link.focus();
+          form.reset();
+          setTimeout(() => ok.style.display = 'none', 4000);
+        } catch (err) {
+          alert('Falha ao enviar: ' + err.message);
+        }
       });
     }
 
-    handleSubmit('form-visitas', K_VISITAS, 'ok-visitas', 'ok-link-visitas', 'visitas');
-    handleSubmit('form-apoio', K_APOIO, 'ok-apoio', 'ok-link-apoio', 'apoio');
+    wireForm('form-visitas', 'ok-visitas', 'ok-link-visitas', 'visitas', 'Visita');
+    wireForm('form-apoio', 'ok-apoio', 'ok-link-apoio', 'apoio', 'Apoio presencial');
   </script>
 </body>
 
