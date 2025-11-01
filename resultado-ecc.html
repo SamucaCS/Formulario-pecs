@@ -187,7 +187,6 @@
             border-top: 1px dashed rgba(255, 255, 255, .18)
         }
 
-        /* Modal */
         .modal {
             position: fixed;
             inset: 0;
@@ -257,20 +256,17 @@
         <header>
             <h1>Resultados – Visitas e Apoio Presencial (PECs)</h1>
             <div class="actions">
-                <!-- dentro do resultado-eecc.html -->
                 <a class="btn btn-secondary" href="./Formulario-ecc.html">Cadastrar novo</a>
                 <button id="printPage" class="btn-secondary">Imprimir</button>
                 <button id="exportCsv" class="btn-secondary">Exportar CSV (aba ativa)</button>
             </div>
         </header>
 
-        <!-- Abas simples -->
         <nav class="actions" style="margin-bottom:10px">
             <button class="btn-secondary" data-tab="visitas" aria-pressed="true">Visitas</button>
             <button class="btn-secondary" data-tab="apoio" aria-pressed="false">Apoio Presencial</button>
         </nav>
 
-        <!-- VISITAS -->
         <section id="sec-visitas" class="card">
             <div class="toolbar">
                 <div class="grow">
@@ -304,7 +300,6 @@
             </div>
         </section>
 
-        <!-- APOIO -->
         <section id="sec-apoio" class="card" style="display:none">
             <div class="toolbar">
                 <div class="grow">
@@ -339,31 +334,16 @@
         </section>
     </div>
 
-    <!-- Modal de Edição -->
+    <!-- Modal -->
     <div id="editModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="editTitle">
         <div class="modal-card">
             <h2 id="editTitle">Editar registro</h2>
             <div class="modal-grid">
-                <div class="field">
-                    <label for="fData">Data</label>
-                    <input id="fData" type="date" />
-                </div>
-                <div class="field">
-                    <label for="fProf">Professores PECs</label>
-                    <input id="fProf" type="text" />
-                </div>
-                <div class="field">
-                    <label for="fEscola">Escola</label>
-                    <input id="fEscola" type="text" />
-                </div>
-                <div class="field">
-                    <label for="fTema">Tema</label>
-                    <input id="fTema" type="text" />
-                </div>
-                <div class="field">
-                    <label for="fObs">Observações</label>
-                    <textarea id="fObs" rows="4"></textarea>
-                </div>
+                <div class="field"><label for="fData">Data</label><input id="fData" type="date" /></div>
+                <div class="field"><label for="fProf">Professores PECs</label><input id="fProf" type="text" /></div>
+                <div class="field"><label for="fEscola">Escola</label><input id="fEscola" type="text" /></div>
+                <div class="field"><label for="fTema">Tema</label><input id="fTema" type="text" /></div>
+                <div class="field"><label for="fObs">Observações</label><textarea id="fObs" rows="4"></textarea></div>
             </div>
             <div class="modal-actions">
                 <button id="btnCancel" class="btn-secondary">Cancelar</button>
@@ -373,21 +353,89 @@
     </div>
 
     <script>
-        // ===== Util =====
+        /* ========= Supabase ========= */
+        const SUPABASE_URL = 'https://xdaanjevbvgqwasjqcew.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkYWFuamV2YnZncXdhc2pxY2V3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIwMDY4NDEsImV4cCI6MjA3NzU4Mjg0MX0.Pf-o3Wa9dLswwd4O8QFcH2v6oXHbvsSXrjIKJMUOz7E';
+
+        const sbHeaders = {
+            'apikey': SUPABASE_ANON_KEY,
+            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+            'Content-Type': 'application/json'
+        };
+
+        async function sbDelete(id) {
+            const url = `${SUPABASE_URL}/rest/v1/pec_submissions?id=eq.${encodeURIComponent(id)}`;
+            const res = await fetch(url, { method: 'DELETE', headers: sbHeaders });
+            if (!res.ok) throw new Error(`DELETE falhou: HTTP ${res.status}`);
+        }
+
+        async function sbUpdate(id, payload) {
+            const url = `${SUPABASE_URL}/rest/v1/pec_submissions?id=eq.${encodeURIComponent(id)}`;
+            const res = await fetch(url, {
+                method: 'PATCH',
+                headers: { ...sbHeaders, 'Prefer': 'return=representation' },
+                body: JSON.stringify(payload)
+            });
+            const txt = await res.text();
+            let json = null; try { json = txt ? JSON.parse(txt) : null } catch { }
+            if (!res.ok) throw new Error(json?.message || txt || `PATCH falhou: HTTP ${res.status}`);
+            return json?.[0] || null;
+        }
+
+        /* ========= Util ========= */
         const $ = (s, scope = document) => scope.querySelector(s);
         const $$ = (s, scope = document) => Array.from(scope.querySelectorAll(s));
         const save = (k, d) => localStorage.setItem(k, JSON.stringify(d));
         const load = (k, f) => { try { return JSON.parse(localStorage.getItem(k)) ?? f } catch { return f } };
         const PT_BR_MESES = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
         const fmt = {
-            date(iso) { if (!iso) return ""; const d = new Date(iso + 'T00:00:00'); const dd = String(d.getDate()).padStart(2, '0'); const mm = String(d.getMonth() + 1).padStart(2, '0'); const yy = d.getFullYear(); return `${dd}/${mm}/${yy}`; },
-            month(iso) { if (!iso) return ""; return PT_BR_MESES[new Date(iso + 'T00:00:00').getMonth()]; }
+            date(iso) { if (!iso) return ""; const d = new Date(iso + 'T00:00:00'); return String(d.getDate()).padStart(2, '0') + '/' + String(d.getMonth() + 1).padStart(2, '0') + '/' + d.getFullYear(); },
+            month(iso) { if (!iso) return ""; return PT_BR_MESES[new Date(iso + 'T00:00:00').getMonth()] }
         };
 
         const K_VISITAS = 'visitas-pecs-v2';
         const K_APOIO = 'apoio-presencial-v1';
 
-        // ===== Abas simples =====
+        /* ========= Sync inicial do banco -> localStorage ========= */
+        async function syncFromSupabase() {
+            const url = `${SUPABASE_URL}/rest/v1/pec_submissions?select=id,school_name,pec_name,visit_date,activity_type,notes&order=created_at.desc`;
+            const res = await fetch(url, { headers: sbHeaders });
+            if (!res.ok) throw new Error(`SELECT falhou: HTTP ${res.status}`);
+            const data = await res.json();
+
+            const visitas = [];
+            const apoios = [];
+
+            for (const row of data) {
+                const at = (row.activity_type || '').trim();
+                const isVisita = at.toLowerCase().startsWith('visita');
+                const isApoio = at.toLowerCase().startsWith('apoio presencial');
+
+                // tema depois do "prefixo: "
+                let tema = at;
+                const p = at.indexOf(':');
+                if (p >= 0) tema = at.slice(p + 1).trim();
+
+                const item = {
+                    id: crypto?.randomUUID?.() || `id-${Math.random().toString(16).slice(2)}`,
+                    db_id: row.id,                         // <- id do banco (para editar/excluir)
+                    kind: isVisita ? 'visita' : (isApoio ? 'apoio' : 'visita'),
+                    data: row.visit_date || '',
+                    professores: row.pec_name || '',
+                    escola: row.school_name || '',
+                    tema: tema || '',
+                    obs: row.notes || ''
+                };
+
+                if (item.kind === 'visita') visitas.push(item);
+                else apoios.push(item);
+            }
+
+            save(K_VISITAS, { items: visitas });
+            save(K_APOIO, { items: apoios });
+        }
+
+        /* ========= Abas ========= */
         const tabBtns = $$('nav [data-tab]');
         const secVis = $('#sec-visitas');
         const secApo = $('#sec-apoio');
@@ -395,14 +443,13 @@
             btn.addEventListener('click', () => {
                 tabBtns.forEach(b => b.setAttribute('aria-pressed', 'false'));
                 btn.setAttribute('aria-pressed', 'true');
-                const tab = btn.getAttribute('data-tab');
-                const vis = (tab === 'visitas');
+                const vis = btn.getAttribute('data-tab') === 'visitas';
                 secVis.style.display = vis ? '' : 'none';
                 secApo.style.display = vis ? 'none' : '';
             });
         });
 
-        // ===== Modal Edição =====
+        /* ========= Modal Edição ========= */
         const modal = $('#editModal');
         const fData = $('#fData'), fProf = $('#fProf'), fEscola = $('#fEscola'), fTema = $('#fTema'), fObs = $('#fObs');
         const btnCancel = $('#btnCancel'), btnSave = $('#btnSave');
@@ -411,33 +458,28 @@
         function openEdit(storageKey, index) {
             const state = load(storageKey, { items: [] });
             const it = state.items[index] || {};
-            // Preenche
-            fData.value = (it.data || '');
-            fProf.value = (it.professores || '');
-            fEscola.value = (it.escola || '');
-            fTema.value = (it.tema || '');
-            fObs.value = (it.obs || '');
+            fData.value = it.data || '';
+            fProf.value = it.professores || '';
+            fEscola.value = it.escola || '';
+            fTema.value = it.tema || '';
+            fObs.value = it.obs || '';
             modalCtx = { storageKey, index, original: it };
             modal.classList.add('open');
         }
         function closeEdit() { modal.classList.remove('open'); modalCtx = null; }
-
         btnCancel.addEventListener('click', closeEdit);
-        modal.addEventListener('click', (e) => { if (e.target === modal) closeEdit(); });
+        modal.addEventListener('click', e => { if (e.target === modal) closeEdit(); });
 
-        btnSave.addEventListener('click', () => {
+        btnSave.addEventListener('click', async () => {
             if (!modalCtx) return;
-            const { storageKey, index } = modalCtx;
+            const { storageKey, index, original } = modalCtx;
             const state = load(storageKey, { items: [] });
 
-            // Validação simples de data (opcional)
             const dval = (fData.value || '').trim();
-            if (dval && !/^\d{4}-\d{2}-\d{2}$/.test(dval)) {
-                alert('Data inválida. Use o formato YYYY-MM-DD.');
-                return;
-            }
+            if (dval && !/^\d{4}-\d{2}-\d{2}$/.test(dval)) { alert('Data inválida. Use YYYY-MM-DD.'); return; }
 
-            state.items[index] = {
+            // Atualiza local
+            const updated = {
                 ...(state.items[index] || {}),
                 data: dval || '',
                 professores: fProf.value || '',
@@ -445,14 +487,31 @@
                 tema: fTema.value || '',
                 obs: fObs.value || ''
             };
+
+            // Se tiver db_id, manda pro Supabase também
+            try {
+                if (updated.db_id) {
+                    const kind = storageKey === K_VISITAS ? 'Visita' : 'Apoio presencial';
+                    await sbUpdate(updated.db_id, {
+                        visit_date: updated.data || null,
+                        school_name: updated.escola || null,
+                        pec_name: updated.professores || null,
+                        notes: updated.obs || null,
+                        activity_type: `${kind}: ${updated.tema || ''}`.trim()
+                    });
+                }
+            } catch (err) {
+                alert('Falha ao salvar no banco: ' + err.message);
+                return;
+            }
+
+            state.items[index] = updated;
             save(storageKey, state);
-            // Re-render nas duas abas para manter tudo sincronizado
-            modVis.render();
-            modApo.render();
+            modVis.render(); modApo.render();
             closeEdit();
         });
 
-        // ===== Fábrica de módulo de leitura (render, filtros, ações) =====
+        /* ========= Tabela / Filtros / Ações ========= */
         function createReadModule(prefix, storageKey, labelPlural) {
             const els = {
                 search: document.getElementById(prefix[0] + '-search'),
@@ -473,7 +532,6 @@
                 });
                 if (selected) els.filterSchool.value = selected;
             }
-
             function initFilters(state) {
                 if (!els.filterMonth.dataset.ready) {
                     PT_BR_MESES.forEach((m, i) => {
@@ -483,25 +541,14 @@
                 }
                 refreshSchoolFilter(state);
             }
-
-            function escapeHtml(str) {
-                return String(str)
-                    .replace(/&/g, '&amp;')
-                    .replace(/</g, '&lt;')
-                    .replace(/>/g, '&gt;')
-                    .replace(/\"/g, '&quot;')
-                    .replace(/'/g, '&#039;');
-            }
+            function escapeHtml(str) { return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\"/g, '&quot;').replace(/'/g, '&#039;'); }
 
             function render() {
-                const state = getState();
-                initFilters(state);
-
+                const state = getState(); initFilters(state);
                 const q = (els.search.value || '').trim().toLowerCase();
-                const mm = els.filterMonth.value; // "" ou "MM"
+                const mm = els.filterMonth.value;
                 const es = (els.filterSchool.value || '').trim();
 
-                // Produz pares [item, idxOriginal] para manter referência mesmo após filtros/sort
                 const rows = state.items
                     .map((it, idx) => ({ it, idx }))
                     .filter(({ it }) => {
@@ -536,43 +583,52 @@
                 refreshSchoolFilter(state);
             }
 
-            // Listeners
             els.search.addEventListener('input', render);
             els.filterMonth.addEventListener('change', render);
             els.filterSchool.addEventListener('change', render);
 
-            // Delegação de eventos para Editar/Excluir
-            els.tbody.addEventListener('click', (ev) => {
-                const btn = ev.target.closest('[data-cmd]');
-                if (!btn) return;
+            // Editar / Excluir
+            els.tbody.addEventListener('click', async (ev) => {
+                const btn = ev.target.closest('[data-cmd]'); if (!btn) return;
                 const idx = Number(btn.getAttribute('data-index'));
                 const cmd = btn.getAttribute('data-cmd');
-                if (cmd === 'edit') {
-                    openEdit(storageKey, idx);
-                } else if (cmd === 'del') {
+
+                if (cmd === 'edit') { openEdit(storageKey, idx); return; }
+
+                if (cmd === 'del') {
                     const state = load(storageKey, { items: [] });
                     const reg = state.items[idx];
                     const txt = reg ? `Confirma excluir o registro de "${reg.professores || '—'}" (${reg.escola || '—'})?` : 'Confirma excluir este registro?';
-                    if (confirm(txt)) {
-                        state.items.splice(idx, 1);
-                        save(storageKey, state);
-                        // Atualiza ambas as abas
-                        modVis.render();
-                        modApo.render();
+                    if (!confirm(txt)) return;
+
+                    try {
+                        if (reg.db_id) await sbDelete(reg.db_id); // apaga no banco
+                    } catch (err) {
+                        alert('Falha ao excluir no banco: ' + err.message);
+                        return;
                     }
+
+                    // apaga local e re-renderiza na hora
+                    state.items.splice(idx, 1);
+                    save(storageKey, state);
+                    modVis.render(); modApo.render();
                 }
             });
 
-            // Inicial
-            render();
             return { render };
         }
 
-        const modVis = createReadModule('visitas', K_VISITAS, 'visitas');
-        const modApo = createReadModule('apoio', K_APOIO, 'apoios');
+        /* ========= Boot ========= */
+        let modVis, modApo;
+        (async function init() {
+            try { await syncFromSupabase(); } catch (e) { console.error('Erro ao sincronizar do Supabase:', e); }
+            modVis = createReadModule('visitas', K_VISITAS, 'visitas');
+            modApo = createReadModule('apoio', K_APOIO, 'apoios');
+            modVis.render(); modApo.render();
+        })();
 
-        // ===== Exportar CSV da aba ativa =====
-        function exportActiveToCSV() {
+        /* ========= Export/Print ========= */
+        document.getElementById('exportCsv').addEventListener('click', () => {
             const visActive = $('#sec-visitas').style.display !== 'none';
             const storageKey = visActive ? K_VISITAS : K_APOIO;
             const prefix = visActive ? 'visitas' : 'apoio';
@@ -582,18 +638,15 @@
             const rows = state.items
                 .sort((a, b) => (a.data || '').localeCompare(b.data || ''))
                 .map(it => [
-                    (it.data ? (() => { const d = new Date(it.data + 'T00:00:00'); return String(d.getDate()).padStart(2, '0') + '/' + String(d.getMonth() + 1).padStart(2, '0') + '/' + d.getFullYear(); })() : ''),
+                    (it.data ? (() => { const d = new Date(it.data + 'T00:00:00'); return String(d.getDate()).padStart(2, '0') + '/' + String(d.getMonth() + 1).padStart(2, '0') + '/' + d.getFullYear() })() : ''),
                     (it.data ? PT_BR_MESES[new Date(it.data + 'T00:00:00').getMonth()] : ''),
                     it.professores || '', it.escola || '', it.tema || '', it.obs || ''
                 ]);
             const csv = [headers, ...rows].map(r => r.map(x => '"' + String(x).replace(/"/g, '""') + '"').join(',')).join('\n');
             const blob = new Blob(["\ufeff" + csv], { type: 'text/csv;charset=utf-8;' });
             const url = URL.createObjectURL(blob);
-            const a = document.createElement('a'); a.href = url; a.download = `${prefix}.csv`; a.click();
-            URL.revokeObjectURL(url);
-        }
-
-        document.getElementById('exportCsv').addEventListener('click', exportActiveToCSV);
+            const a = document.createElement('a'); a.href = url; a.download = `${prefix}.csv`; a.click(); URL.revokeObjectURL(url);
+        });
         document.getElementById('printPage').addEventListener('click', () => window.print());
     </script>
 </body>
