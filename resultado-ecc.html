@@ -334,7 +334,7 @@
         </section>
     </div>
 
-    <!-- Modal -->
+    
     <div id="editModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="editTitle">
         <div class="modal-card">
             <h2 id="editTitle">Editar registro</h2>
@@ -353,7 +353,7 @@
     </div>
 
     <script>
-        /* ========= Supabase ========= */
+        
         const SUPABASE_URL = 'https://xdaanjevbvgqwasjqcew.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkYWFuamV2YnZncXdhc2pxY2V3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIwMDY4NDEsImV4cCI6MjA3NzU4Mjg0MX0.Pf-o3Wa9dLswwd4O8QFcH2v6oXHbvsSXrjIKJMUOz7E';
 
@@ -382,7 +382,7 @@
             return json?.[0] || null;
         }
 
-        /* ========= Util ========= */
+       
         const $ = (s, scope = document) => scope.querySelector(s);
         const $$ = (s, scope = document) => Array.from(scope.querySelectorAll(s));
         const save = (k, d) => localStorage.setItem(k, JSON.stringify(d));
@@ -396,7 +396,7 @@
         const K_VISITAS = 'visitas-pecs-v2';
         const K_APOIO = 'apoio-presencial-v1';
 
-        /* ========= Sync inicial do banco -> localStorage ========= */
+      
         async function syncFromSupabase() {
             const url = `${SUPABASE_URL}/rest/v1/pec_submissions?select=id,school_name,pec_name,visit_date,activity_type,notes&order=created_at.desc`;
             const res = await fetch(url, { headers: sbHeaders });
@@ -411,7 +411,7 @@
                 const isVisita = at.toLowerCase().startsWith('visita');
                 const isApoio = at.toLowerCase().startsWith('apoio presencial');
 
-                // tema depois do "prefixo: "
+               
                 let tema = at;
                 const p = at.indexOf(':');
                 if (p >= 0) tema = at.slice(p + 1).trim();
@@ -435,7 +435,6 @@
             save(K_APOIO, { items: apoios });
         }
 
-        /* ========= Abas ========= */
         const tabBtns = $$('nav [data-tab]');
         const secVis = $('#sec-visitas');
         const secApo = $('#sec-apoio');
@@ -449,11 +448,11 @@
             });
         });
 
-        /* ========= Modal Edição ========= */
+        
         const modal = $('#editModal');
         const fData = $('#fData'), fProf = $('#fProf'), fEscola = $('#fEscola'), fTema = $('#fTema'), fObs = $('#fObs');
         const btnCancel = $('#btnCancel'), btnSave = $('#btnSave');
-        let modalCtx = null; // { storageKey, index, original }
+        let modalCtx = null; 
 
         function openEdit(storageKey, index) {
             const state = load(storageKey, { items: [] });
@@ -488,7 +487,6 @@
                 obs: fObs.value || ''
             };
 
-            // Se tiver db_id, manda pro Supabase também
             try {
                 if (updated.db_id) {
                     const kind = storageKey === K_VISITAS ? 'Visita' : 'Apoio presencial';
@@ -511,7 +509,7 @@
             closeEdit();
         });
 
-        /* ========= Tabela / Filtros / Ações ========= */
+        
         function createReadModule(prefix, storageKey, labelPlural) {
             const els = {
                 search: document.getElementById(prefix[0] + '-search'),
@@ -587,7 +585,7 @@
             els.filterMonth.addEventListener('change', render);
             els.filterSchool.addEventListener('change', render);
 
-            // Editar / Excluir
+          
             els.tbody.addEventListener('click', async (ev) => {
                 const btn = ev.target.closest('[data-cmd]'); if (!btn) return;
                 const idx = Number(btn.getAttribute('data-index'));
@@ -608,7 +606,7 @@
                         return;
                     }
 
-                    // apaga local e re-renderiza na hora
+                    
                     state.items.splice(idx, 1);
                     save(storageKey, state);
                     modVis.render(); modApo.render();
@@ -618,7 +616,7 @@
             return { render };
         }
 
-        /* ========= Boot ========= */
+       
         let modVis, modApo;
         (async function init() {
             try { await syncFromSupabase(); } catch (e) { console.error('Erro ao sincronizar do Supabase:', e); }
@@ -627,7 +625,7 @@
             modVis.render(); modApo.render();
         })();
 
-        /* ========= Export/Print ========= */
+        
         document.getElementById('exportCsv').addEventListener('click', () => {
             const visActive = $('#sec-visitas').style.display !== 'none';
             const storageKey = visActive ? K_VISITAS : K_APOIO;
@@ -652,3 +650,4 @@
 </body>
 
 </html>
+
