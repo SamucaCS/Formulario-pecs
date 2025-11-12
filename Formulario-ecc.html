@@ -170,7 +170,7 @@
       </div>
     </header>
 
-    <!-- VISITAS -->
+  
     <section class="card" aria-labelledby="titulo-visitas">
       <form id="form-visitas">
         <h2 id="titulo-visitas" style="margin:0 0 8px;font-size:1rem">Nova visita</h2>
@@ -208,7 +208,7 @@
       </form>
     </section>
 
-    <!-- APOIO PRESENCIAL -->
+   
     <section class="card" aria-labelledby="titulo-apoio">
       <form id="form-apoio">
         <h2 id="titulo-apoio" style="margin:0 0 8px;font-size:1rem">Novo apoio presencial</h2>
@@ -248,13 +248,13 @@
   </div>
 
   <script>
-    // === Config Supabase (seu projeto)
+   
     const SUPABASE_URL = 'https://xdaanjevbvgqwasjqcew.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkYWFuamV2YnZncXdhc2pxY2V3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIwMDY4NDEsImV4cCI6MjA3NzU4Mjg0MX0.Pf-o3Wa9dLswwd4O8QFcH2v6oXHbvsSXrjIKJMUOz7E';
 
     function deviceType() { return /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) ? 'mobile' : 'desktop'; }
 
-    // ====== ENVIO COM LOG DETALHADO ======
+    
     async function enviar(payload) {
       console.log('Payload enviado:', payload); // << vê exatamente o JSON
       const res = await fetch(`${SUPABASE_URL}/rest/v1/pec_submissions`, {
@@ -278,7 +278,7 @@
       try { return JSON.parse(text); } catch { return text; }
     }
 
-    // ====== MONTA O PAYLOAD E ENVIA ======
+   
     function wireForm(formId, okId, okLinkId, tabName, prefixo) {
       const form = document.getElementById(formId);
       const link = document.getElementById(okLinkId);
@@ -297,8 +297,8 @@
           pec_name: (fd.get('professores') || '').toString().trim(),
           supervisor_name: null,
           role: null,
-          visit_date: (fd.get('data') || '').toString(),     // YYYY-MM-DD
-          period: null,                                    // opcional
+          visit_date: (fd.get('data') || '').toString(),     
+          period: null,                                    
           activity_type: `${prefixo}: ${(fd.get('tema') || '').toString().trim()}`,
           notes: (fd.get('obs') || '').toString().trim() || null,
           device: deviceType(),
@@ -324,5 +324,6 @@
 </body>
 
 </html>
+
 
 
