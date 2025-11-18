@@ -182,13 +182,47 @@
         <h2 id="titulo-visitas" style="margin:0 0 8px;font-size:1rem">Nova visita</h2>
         <div class="grid">
           <div class="col-6">
-            <label for="v-prof">Professores PECs</label>
-            <input id="v-prof" name="professores" type="text" placeholder="Ex.: Ana Silva; João Santos" required />
+            <label for="v-prof-select">Professores PECs</label>
+            <select id="v-prof-select" name="professores_select" required>
+              <option value="" disabled selected>Selecione o PEC…</option>
+              <option value="DANIELLA LUSNI DE SOUZA - CEC">DANIELLA LUSNI DE SOUZA - CEC</option>
+              <option value="ALESSANDRA WINK">ALESSANDRA WINK</option>
+              <option value="ANA DEISE LAVOR FIRMINO">ANA DEISE LAVOR FIRMINO</option>
+              <option value="ANA PAULA CAMPOS GUERRA">ANA PAULA CAMPOS GUERRA</option>
+              <option value="AMANDA PAULA RODRIGUES TEIXEIRA">AMANDA PAULA RODRIGUES TEIXEIRA</option>
+              <option value="ARI OLIVEIRA CARVALHO JUNIOR">ARI OLIVEIRA CARVALHO JUNIOR</option>
+              <option value="CAMILA SANTOS ROCHA">CAMILA SANTOS ROCHA</option>
+              <option value="CARLOS M PRECECHAN">CARLOS M PRECECHAN</option>
+              <option value="CLAUDIA BARBOSA SANTANA MIRANDOLA">CLAUDIA BARBOSA SANTANA MIRANDOLA</option>
+              <option value="FÁBIO DE PAULA FERRAZ">FÁBIO DE PAULA FERRAZ</option>
+              <option value="FABIANA GOMES RAMOS DA SILVA">FABIANA GOMES RAMOS DA SILVA</option>
+              <option value="JÉSSICA SOUZA KUMAGAI">JÉSSICA SOUZA KUMAGAI</option>
+              <option value="JOSÉ VANDEI SILVA DE OLIVEIRA">JOSÉ VANDEI SILVA DE OLIVEIRA</option>
+              <option value="JOSIANE MARQUES MOREIRA DA CONCEIÇÃO">JOSIANE MARQUES MOREIRA DA CONCEIÇÃO</option>
+              <option value="LAIS GUIMARÃES FURST">LAIS GUIMARÃES FURST</option>
+              <option value="MARCELO VICENTE CAVALCANTE DA SILVA">MARCELO VICENTE CAVALCANTE DA SILVA</option>
+              <option value="MARCIA YOSHIKO BUTO">MARCIA YOSHIKO BUTO</option>
+              <option value="MARINETE PEREIRA DE SOUZA OLIVEIRA">MARINETE PEREIRA DE SOUZA OLIVEIRA</option>
+              <option value="MIDIAN DE ALMEIDA PEREIRA">MIDIAN DE ALMEIDA PEREIRA</option>
+              <option value="NÚBIA MIRANDA DA SILVA">NÚBIA MIRANDA DA SILVA</option>
+              <option value="PAULA MARGARETE ALVES">PAULA MARGARETE ALVES</option>
+              <option value="PRISCILA RIBEIRO DA SILVA">PRISCILA RIBEIRO DA SILVA</option>
+              <option value="RAMILCA MORAIS DE ANDRADE">RAMILCA MORAIS DE ANDRADE</option>
+              <option value="RENATO BENEDITO">RENATO BENEDITO</option>
+              <option value="SANDRA REGINA SOARES CLEMENTE">SANDRA REGINA SOARES CLEMENTE</option>
+              <option value="THAIS ALEKSEJUK BERNARDES">THAIS ALEKSEJUK BERNARDES</option>
+              <option value="VALÉRIA SANTOS FRANÇA">VALÉRIA SANTOS FRANÇA</option>
+             
+            </select>
+            <input id="v-prof-outros" name="professores_outros" type="text" class="tema-outros"
+              placeholder="Digite o nome do PEC" />
           </div>
+
           <div class="col-3">
             <label for="v-data">Data</label>
             <input id="v-data" name="data" type="date" required />
           </div>
+
           <div class="col-3">
             <label for="v-escola">Escola</label>
             <select id="v-escola" name="escola" required>
@@ -299,19 +333,51 @@
         <h2 id="titulo-apoio" style="margin:0 0 8px;font-size:1rem">Novo apoio presencial</h2>
         <div class="grid">
           <div class="col-6">
-            <label for="a-prof">Professores PECs</label>
-            <input id="a-prof" name="professores" type="text" placeholder="Ex.: Ana Silva; João Santos" required />
+            <label for="a-prof-select">Professores PECs</label>
+            <select id="a-prof-select" name="professores_select" required>
+              <option value="" disabled selected>Selecione o PEC…</option>
+              <option value="DANIELLA LUSNI DE SOUZA - CEC">DANIELLA LUSNI DE SOUZA - CEC</option>
+              <option value="ALESSANDRA WINK">ALESSANDRA WINK</option>
+              <option value="ANA DEISE LAVOR FIRMINO">ANA DEISE LAVOR FIRMINO</option>
+              <option value="ANA PAULA CAMPOS GUERRA">ANA PAULA CAMPOS GUERRA</option>
+              <option value="AMANDA PAULA RODRIGUES TEIXEIRA">AMANDA PAULA RODRIGUES TEIXEIRA</option>
+              <option value="ARI OLIVEIRA CARVALHO JUNIOR">ARI OLIVEIRA CARVALHO JUNIOR</option>
+              <option value="CAMILA SANTOS ROCHA">CAMILA SANTOS ROCHA</option>
+              <option value="CARLOS M PRECECHAN">CARLOS M PRECECHAN</option>
+              <option value="CLAUDIA BARBOSA SANTANA MIRANDOLA">CLAUDIA BARBOSA SANTANA MIRANDOLA</option>
+              <option value="FÁBIO DE PAULA FERRAZ">FÁBIO DE PAULA FERRAZ</option>
+              <option value="FABIANA GOMES RAMOS DA SILVA">FABIANA GOMES RAMOS DA SILVA</option>
+              <option value="JÉSSICA SOUZA KUMAGAI">JÉSSICA SOUZA KUMAGAI</option>
+              <option value="JOSÉ VANDEI SILVA DE OLIVEIRA">JOSÉ VANDEI SILVA DE OLIVEIRA</option>
+              <option value="JOSIANE MARQUES MOREIRA DA CONCEIÇÃO">JOSIANE MARQUES MOREIRA DA CONCEIÇÃO</option>
+              <option value="LAIS GUIMARÃES FURST">LAIS GUIMARÃES FURST</option>
+              <option value="MARCELO VICENTE CAVALCANTE DA SILVA">MARCELO VICENTE CAVALCANTE DA SILVA</option>
+              <option value="MARCIA YOSHIKO BUTO">MARCIA YOSHIKO BUTO</option>
+              <option value="MARINETE PEREIRA DE SOUZA OLIVEIRA">MARINETE PEREIRA DE SOUZA OLIVEIRA</option>
+              <option value="MIDIAN DE ALMEIDA PEREIRA">MIDIAN DE ALMEIDA PEREIRA</option>
+              <option value="NÚBIA MIRANDA DA SILVA">NÚBIA MIRANDA DA SILVA</option>
+              <option value="PAULA MARGARETE ALVES">PAULA MARGARETE ALVES</option>
+              <option value="PRISCILA RIBEIRO DA SILVA">PRISCILA RIBEIRO DA SILVA</option>
+              <option value="RAMILCA MORAIS DE ANDRADE">RAMILCA MORAIS DE ANDRADE</option>
+              <option value="RENATO BENEDITO">RENATO BENEDITO</option>
+              <option value="SANDRA REGINA SOARES CLEMENTE">SANDRA REGINA SOARES CLEMENTE</option>
+              <option value="THAIS ALEKSEJUK BERNARDES">THAIS ALEKSEJUK BERNARDES</option>
+              <option value="VALÉRIA SANTOS FRANÇA">VALÉRIA SANTOS FRANÇA</option>
+              
+            </select>
+            <input id="a-prof-outros" name="professores_outros" type="text" class="tema-outros"
+              placeholder="Digite o nome do PEC" />
           </div>
+
           <div class="col-3">
             <label for="a-data">Data</label>
             <input id="a-data" name="data" type="date" required />
           </div>
-          <div class="col-3">
-            <label for="v-escola">Escola</label>
-            <select id="v-escola" name="escola" required
-              style="width:100%;background:#0b1226;border:1px solid rgba(255,255,255,.1);color:var(--text);padding:12px;border-radius:12px;outline:none">
-              <option value="" disabled selected>Selecione a escola…</option>
 
+          <div class="col-3">
+            <label for="a-escola">Escola</label>
+            <select id="a-escola" name="escola" required>
+              <option value="" disabled selected>Selecione a escola…</option>
               <option>ALFREDO ROBERTO</option>
               <option>ALICE ROMANOS PROFESSORA</option>
               <option>ANDERSON DA SILVA SOARES</option>
@@ -382,6 +448,7 @@
             <input id="a-tema" name="tema" type="text" placeholder="Ex.: Tecnologias educativas; Apoio em sala"
               required />
           </div>
+
           <div class="col-12">
             <label for="a-obs">Observações (opcional)</label>
             <textarea id="a-obs" name="obs"
@@ -408,7 +475,7 @@
       return /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) ? 'mobile' : 'desktop';
     }
 
-    function setupTemaSelect(selectId, outrosInputId) {
+    function setupSelectOutros(selectId, outrosInputId) {
       const select = document.getElementById(selectId);
       const outros = document.getElementById(outrosInputId);
       if (!select || !outros) return;
@@ -426,8 +493,11 @@
       update();
     }
 
-    setupTemaSelect('v-tema-select', 'v-tema-outros');
-    setupTemaSelect('a-tema-select', 'a-tema-outros');
+    // Tema (visita)
+    setupSelectOutros('v-tema-select', 'v-tema-outros');
+    // PECs
+    setupSelectOutros('v-prof-select', 'v-prof-outros');
+    setupSelectOutros('a-prof-select', 'a-prof-outros');
 
     // ====== ENVIO COM LOG DETALHADO ======
     async function enviar(payload) {
@@ -467,20 +537,42 @@
         e.preventDefault();
         const fd = new FormData(form);
 
+        // === Tema (funciona para visita com select+Outros e para apoio com campo texto "tema")
         const temaSelect = (fd.get('tema_select') || '').toString().trim();
         const temaOutros = (fd.get('tema_outros') || '').toString().trim();
+        const temaDireto = (fd.get('tema') || '').toString().trim();
 
         let temaFinal = '';
-        if (temaSelect === 'Outros' && temaOutros) {
-          temaFinal = `Outros – ${temaOutros}`;
+        if (temaSelect || temaOutros) {
+          if (temaSelect === 'Outros' && temaOutros) {
+            temaFinal = `Outros – ${temaOutros}`;
+          } else {
+            temaFinal = temaSelect || temaOutros;
+          }
         } else {
-          temaFinal = temaSelect || temaOutros;
+          temaFinal = temaDireto;
+        }
+
+        // === PECs (select + Outros, com fallback pro campo texto antigo se existir)
+        const profSelect = (fd.get('professores_select') || '').toString().trim();
+        const profOutros = (fd.get('professores_outros') || '').toString().trim();
+        const profDireto = (fd.get('professores') || '').toString().trim();
+
+        let pecFinal = '';
+        if (profSelect || profOutros) {
+          if (profSelect === 'Outros' && profOutros) {
+            pecFinal = profOutros;
+          } else {
+            pecFinal = profSelect || profOutros;
+          }
+        } else {
+          pecFinal = profDireto;
         }
 
         const payload = {
           school_id: null,
           school_name: (fd.get('escola') || '').toString().trim(),
-          pec_name: (fd.get('professores') || '').toString().trim(),
+          pec_name: pecFinal,
           supervisor_name: null,
           role: null,
           visit_date: (fd.get('data') || '').toString(), // YYYY-MM-DD
@@ -497,7 +589,6 @@
           ok.style.display = 'block';
           link.focus();
           form.reset();
-          // re-força o estado do campo "Outros" após reset
           setTimeout(() => {
             ok.style.display = 'none';
           }, 4000);
