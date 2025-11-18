@@ -100,7 +100,8 @@
     }
 
     input,
-    textarea {
+    textarea,
+    select {
       width: 100%;
       background: #0b1226;
       border: 1px solid rgba(255, 255, 255, .1);
@@ -113,6 +114,11 @@
     textarea {
       min-height: 70px;
       resize: vertical
+    }
+
+    .tema-outros {
+      margin-top: 8px;
+      display: none;
     }
 
     .actions {
@@ -170,7 +176,7 @@
       </div>
     </header>
 
-  
+    <!-- VISITAS -->
     <section class="card" aria-labelledby="titulo-visitas">
       <form id="form-visitas">
         <h2 id="titulo-visitas" style="margin:0 0 8px;font-size:1rem">Nova visita</h2>
@@ -185,13 +191,92 @@
           </div>
           <div class="col-3">
             <label for="v-escola">Escola</label>
-            <input id="v-escola" name="escola" type="text" placeholder="Ex.: E.E. Alberto Santos" required />
+            <select id="v-escola" name="escola" required>
+              <option value="" disabled selected>Selecione a escola…</option>
+              <option>ALFREDO ROBERTO</option>
+              <option>ALICE ROMANOS PROFESSORA</option>
+              <option>ANDERSON DA SILVA SOARES</option>
+              <option>ANGELA SUELI PONTES DIAS PROFESSORA</option>
+              <option>ANIS FADUL DOUTOR</option>
+              <option>ANTONIO BRASILIO MENEZES DA FONSECA PROFESSOR</option>
+              <option>ANTONIO GARCIA VEREADOR</option>
+              <option>ANTONIO JOSE CAMPOS DE MENEZES PROFESSOR</option>
+              <option>ANTONIO RODRIGUES DE ALMEIDA</option>
+              <option>ANTONIO VALDEMAR GALO VEREADOR</option>
+              <option>BATISTA RENZI</option>
+              <option>BENEDITA DE CAMPOS MARCOLONGO PROFESSORA</option>
+              <option>BRASILIO MACHADO NETO COMENDADOR</option>
+              <option>CARLINDO REIS</option>
+              <option>CARLOS MOLTENI PROFESSOR</option>
+              <option>CHOJIRO SEGAWA</option>
+              <option>CONJUNTO HABITACIONAL PARQUE DOURADO II</option>
+              <option>DAVID JORGE CURI PROFESSOR</option>
+              <option>EDIR DO COUTO ROSA PROFESSOR</option>
+              <option>ELIANE APARECIDA DANTAS DA SILVA PROFESSORA</option>
+              <option>EUCLIDES IGESCA</option>
+              <option>GERALDO JUSTINIANO DE REZENDE SILVA PROFESSOR</option>
+              <option>GILBERTO DE CARVALHO PROFESSOR</option>
+              <option>GIOVANNI BATTISTA RAFFO PROFESSOR DOUTOR</option>
+              <option>HELENA ZERRENNER</option>
+              <option>IGNES CORREA ALLEN PROFESSORA</option>
+              <option>IIJIMA</option>
+              <option>JACQUES YVES COUSTEAU COMANDANTE</option>
+              <option>JANDYRA COUTINHO PROFESSORA</option>
+              <option>JARDIM SAO PAULO II</option>
+              <option>JOSE BENEDITO LEITE BARTHOLOMEI PROFESSOR</option>
+              <option>JOSE CAMILO DE ANDRADE</option>
+              <option>JOSE EDUARDO VIEIRA RADUAN DOUTOR</option>
+              <option>JOSE PAPAIZ PROFESSOR</option>
+              <option>JOVIANO SATLER DE LIMA PROFESSOR</option>
+              <option>JUSSARA FEITOSA DOMSCHKE PROFESSORA</option>
+              <option>JUSTINO MARCONDES RANGEL PROFESSOR</option>
+              <option>LANDIA SANTOS BATISTA PROFESSORA</option>
+              <option>LEDA FERNANDES LOPES PROFESSORA</option>
+              <option>LUCY FRANCO KOWALSKI PROFESSORA</option>
+              <option>LUIZ BIANCONI</option>
+              <option>LUIZA HIDAKA PROFESSORA</option>
+              <option>MANUEL DOS SANTOS PAIVA</option>
+              <option>MARIA ELISA DE AZEVEDO CINTRA PROFESSORA</option>
+              <option>MARIO MANOEL DANTAS DE AQUINO PROFESSOR</option>
+              <option>MARTHA CALIXTO CAZAGRANDE</option>
+              <option>MASAITI SEKINE PROFESSOR</option>
+              <option>MORATO DE OLIVEIRA DOUTOR</option>
+              <option>OLAVO LEONEL FERREIRA PROFESSOR</option>
+              <option>OLZANETTI GOMES PROFESSOR</option>
+              <option>OSWALDO DE OLIVEIRA LIMA</option>
+              <option>PAULO AMERICO PAGANUCCI PROFESSOR</option>
+              <option>PAULO KOBAYASHI PROFESSOR</option>
+              <option>RAUL BRASIL PROFESSOR</option>
+              <option>ROBERTO BIANCHI</option>
+              <option>SEBASTIAO PEREIRA VIDAL</option>
+              <option>TACITO ZANCHETTA PREFEITO</option>
+              <option>TOCHICHICO YOCHICAVA PROFESSOR</option>
+              <option>TOKUZO TERAZAKI</option>
+              <option>YOLANDA BASSI PROFESSORA</option>
+              <option>ZEIKICHI FUKUOKA</option>
+              <option>ZELIA GATTAI AMADO</option>
+            </select>
           </div>
+
           <div class="col-12">
-            <label for="v-tema">Tema Abordado</label>
-            <input id="v-tema" name="tema" type="text" placeholder="Ex.: Avaliação diagnóstica; Planejamento de aula"
-              required />
+            <label for="v-tema-select">Tema</label>
+            <select id="v-tema-select" name="tema_select" required>
+              <option value="" disabled selected>Selecione o tema…</option>
+              <option value="ROTEIRO SEDUC">ROTEIRO SEDUC</option>
+              <option value="PLATAFORMAS">PLATAFORMAS</option>
+              <option value="ALUNO PRESENTE">ALUNO PRESENTE</option>
+              <option value="FORMAÇÃO">FORMAÇÃO</option>
+              <option value="FLUÊNCIA LEITORA">FLUÊNCIA LEITORA</option>
+              <option value="CONVIVA">CONVIVA</option>
+              <option value="SAEB/SARESP">SAEB/SARESP</option>
+              <option value="Multiplica">Multiplica</option>
+              <option value="Educação Profissional Técnica - EPT">Educação Profissional Técnica - EPT</option>
+              <option value="Outros">Outros</option>
+            </select>
+            <input id="v-tema-outros" name="tema_outros" type="text" class="tema-outros"
+              placeholder="Descreva o tema" />
           </div>
+
           <div class="col-12">
             <label for="v-obs">Observações (opcional)</label>
             <textarea id="v-obs" name="obs"
@@ -208,7 +293,7 @@
       </form>
     </section>
 
-   
+    <!-- APOIO PRESENCIAL -->
     <section class="card" aria-labelledby="titulo-apoio">
       <form id="form-apoio">
         <h2 id="titulo-apoio" style="margin:0 0 8px;font-size:1rem">Novo apoio presencial</h2>
@@ -222,9 +307,76 @@
             <input id="a-data" name="data" type="date" required />
           </div>
           <div class="col-3">
-            <label for="a-escola">Escola</label>
-            <input id="a-escola" name="escola" type="text" placeholder="Ex.: E.E. Alberto Santos" required />
+            <label for="v-escola">Escola</label>
+            <select id="v-escola" name="escola" required
+              style="width:100%;background:#0b1226;border:1px solid rgba(255,255,255,.1);color:var(--text);padding:12px;border-radius:12px;outline:none">
+              <option value="" disabled selected>Selecione a escola…</option>
+
+              <option>ALFREDO ROBERTO</option>
+              <option>ALICE ROMANOS PROFESSORA</option>
+              <option>ANDERSON DA SILVA SOARES</option>
+              <option>ANGELA SUELI PONTES DIAS PROFESSORA</option>
+              <option>ANIS FADUL DOUTOR</option>
+              <option>ANTONIO BRASILIO MENEZES DA FONSECA PROFESSOR</option>
+              <option>ANTONIO GARCIA VEREADOR</option>
+              <option>ANTONIO JOSE CAMPOS DE MENEZES PROFESSOR</option>
+              <option>ANTONIO RODRIGUES DE ALMEIDA</option>
+              <option>ANTONIO VALDEMAR GALO VEREADOR</option>
+              <option>BATISTA RENZI</option>
+              <option>BENEDITA DE CAMPOS MARCOLONGO PROFESSORA</option>
+              <option>BRASILIO MACHADO NETO COMENDADOR</option>
+              <option>CARLINDO REIS</option>
+              <option>CARLOS MOLTENI PROFESSOR</option>
+              <option>CHOJIRO SEGAWA</option>
+              <option>CONJUNTO HABITACIONAL PARQUE DOURADO II</option>
+              <option>DAVID JORGE CURI PROFESSOR</option>
+              <option>EDIR DO COUTO ROSA PROFESSOR</option>
+              <option>ELIANE APARECIDA DANTAS DA SILVA PROFESSORA</option>
+              <option>EUCLIDES IGESCA</option>
+              <option>GERALDO JUSTINIANO DE REZENDE SILVA PROFESSOR</option>
+              <option>GILBERTO DE CARVALHO PROFESSOR</option>
+              <option>GIOVANNI BATTISTA RAFFO PROFESSOR DOUTOR</option>
+              <option>HELENA ZERRENNER</option>
+              <option>IGNES CORREA ALLEN PROFESSORA</option>
+              <option>IIJIMA</option>
+              <option>JACQUES YVES COUSTEAU COMANDANTE</option>
+              <option>JANDYRA COUTINHO PROFESSORA</option>
+              <option>JARDIM SAO PAULO II</option>
+              <option>JOSE BENEDITO LEITE BARTHOLOMEI PROFESSOR</option>
+              <option>JOSE CAMILO DE ANDRADE</option>
+              <option>JOSE EDUARDO VIEIRA RADUAN DOUTOR</option>
+              <option>JOSE PAPAIZ PROFESSOR</option>
+              <option>JOVIANO SATLER DE LIMA PROFESSOR</option>
+              <option>JUSSARA FEITOSA DOMSCHKE PROFESSORA</option>
+              <option>JUSTINO MARCONDES RANGEL PROFESSOR</option>
+              <option>LANDIA SANTOS BATISTA PROFESSORA</option>
+              <option>LEDA FERNANDES LOPES PROFESSORA</option>
+              <option>LUCY FRANCO KOWALSKI PROFESSORA</option>
+              <option>LUIZ BIANCONI</option>
+              <option>LUIZA HIDAKA PROFESSORA</option>
+              <option>MANUEL DOS SANTOS PAIVA</option>
+              <option>MARIA ELISA DE AZEVEDO CINTRA PROFESSORA</option>
+              <option>MARIO MANOEL DANTAS DE AQUINO PROFESSOR</option>
+              <option>MARTHA CALIXTO CAZAGRANDE</option>
+              <option>MASAITI SEKINE PROFESSOR</option>
+              <option>MORATO DE OLIVEIRA DOUTOR</option>
+              <option>OLAVO LEONEL FERREIRA PROFESSOR</option>
+              <option>OLZANETTI GOMES PROFESSOR</option>
+              <option>OSWALDO DE OLIVEIRA LIMA</option>
+              <option>PAULO AMERICO PAGANUCCI PROFESSOR</option>
+              <option>PAULO KOBAYASHI PROFESSOR</option>
+              <option>RAUL BRASIL PROFESSOR</option>
+              <option>ROBERTO BIANCHI</option>
+              <option>SEBASTIAO PEREIRA VIDAL</option>
+              <option>TACITO ZANCHETTA PREFEITO</option>
+              <option>TOCHICHICO YOCHICAVA PROFESSOR</option>
+              <option>TOKUZO TERAZAKI</option>
+              <option>YOLANDA BASSI PROFESSORA</option>
+              <option>ZEIKICHI FUKUOKA</option>
+              <option>ZELIA GATTAI AMADO</option>
+            </select>
           </div>
+
           <div class="col-12">
             <label for="a-tema">Componente</label>
             <input id="a-tema" name="tema" type="text" placeholder="Ex.: Tecnologias educativas; Apoio em sala"
@@ -248,20 +400,44 @@
   </div>
 
   <script>
-   
+    // === Config Supabase (seu projeto)
     const SUPABASE_URL = 'https://xdaanjevbvgqwasjqcew.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkYWFuamV2YnZncXdhc2pxY2V3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIwMDY4NDEsImV4cCI6MjA3NzU4Mjg0MX0.Pf-o3Wa9dLswwd4O8QFcH2v6oXHbvsSXrjIKJMUOz7E';
 
-    function deviceType() { return /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) ? 'mobile' : 'desktop'; }
+    function deviceType() {
+      return /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) ? 'mobile' : 'desktop';
+    }
 
-    
+    function setupTemaSelect(selectId, outrosInputId) {
+      const select = document.getElementById(selectId);
+      const outros = document.getElementById(outrosInputId);
+      if (!select || !outros) return;
+
+      function update() {
+        if (select.value === 'Outros') {
+          outros.style.display = 'block';
+        } else {
+          outros.style.display = 'none';
+          outros.value = '';
+        }
+      }
+
+      select.addEventListener('change', update);
+      update();
+    }
+
+    setupTemaSelect('v-tema-select', 'v-tema-outros');
+    setupTemaSelect('a-tema-select', 'a-tema-outros');
+
+    // ====== ENVIO COM LOG DETALHADO ======
     async function enviar(payload) {
-      console.log('Payload enviado:', payload); // << vê exatamente o JSON
+      console.log('Payload enviado:', payload);
+
       const res = await fetch(`${SUPABASE_URL}/rest/v1/pec_submissions`, {
         method: 'POST',
         headers: {
           'apikey': SUPABASE_ANON_KEY,
-          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+          'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
           'Content-Type': 'application/json',
           'Prefer': 'return=representation'
         },
@@ -278,7 +454,7 @@
       try { return JSON.parse(text); } catch { return text; }
     }
 
-   
+    // ====== MONTA O PAYLOAD E ENVIA ======
     function wireForm(formId, okId, okLinkId, tabName, prefixo) {
       const form = document.getElementById(formId);
       const link = document.getElementById(okLinkId);
@@ -291,15 +467,25 @@
         e.preventDefault();
         const fd = new FormData(form);
 
+        const temaSelect = (fd.get('tema_select') || '').toString().trim();
+        const temaOutros = (fd.get('tema_outros') || '').toString().trim();
+
+        let temaFinal = '';
+        if (temaSelect === 'Outros' && temaOutros) {
+          temaFinal = `Outros – ${temaOutros}`;
+        } else {
+          temaFinal = temaSelect || temaOutros;
+        }
+
         const payload = {
           school_id: null,
           school_name: (fd.get('escola') || '').toString().trim(),
           pec_name: (fd.get('professores') || '').toString().trim(),
           supervisor_name: null,
           role: null,
-          visit_date: (fd.get('data') || '').toString(),     
-          period: null,                                    
-          activity_type: `${prefixo}: ${(fd.get('tema') || '').toString().trim()}`,
+          visit_date: (fd.get('data') || '').toString(), // YYYY-MM-DD
+          period: null,
+          activity_type: `${prefixo}: ${temaFinal}`,
           notes: (fd.get('obs') || '').toString().trim() || null,
           device: deviceType(),
           attachments: []
@@ -311,7 +497,10 @@
           ok.style.display = 'block';
           link.focus();
           form.reset();
-          setTimeout(() => ok.style.display = 'none', 4000);
+          // re-força o estado do campo "Outros" após reset
+          setTimeout(() => {
+            ok.style.display = 'none';
+          }, 4000);
         } catch (err) {
           alert('Falha ao enviar: ' + err.message);
         }
@@ -324,6 +513,3 @@
 </body>
 
 </html>
-
-
-
