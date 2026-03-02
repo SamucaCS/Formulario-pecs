@@ -361,6 +361,7 @@
               <option value="RAMILCA MORAIS DE ANDRADE">RAMILCA MORAIS DE ANDRADE</option>
               <option value="RENATO BENEDITO">RENATO BENEDITO</option>
               <option value="SANDRA REGINA SOARES CLEMENTE">SANDRA REGINA SOARES CLEMENTE</option>
+              <option value="SIMONE BARONE YOSHIOKA SALERMO">SIMONE BARONE YOSHIOKA SALERMO</option>
               <option value="THAIS ALEKSEJUK BERNARDES">THAIS ALEKSEJUK BERNARDES</option>
               <option value="VALÉRIA SANTOS FRANÇA">VALÉRIA SANTOS FRANÇA</option>
               
@@ -467,7 +468,6 @@
   </div>
 
   <script>
-    // === Config Supabase (seu projeto)
     const SUPABASE_URL = 'https://xdaanjevbvgqwasjqcew.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkYWFuamV2YnZncXdhc2pxY2V3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIwMDY4NDEsImV4cCI6MjA3NzU4Mjg0MX0.Pf-o3Wa9dLswwd4O8QFcH2v6oXHbvsSXrjIKJMUOz7E';
 
@@ -493,13 +493,11 @@
       update();
     }
 
-    // Tema (visita)
     setupSelectOutros('v-tema-select', 'v-tema-outros');
     // PECs
     setupSelectOutros('v-prof-select', 'v-prof-outros');
     setupSelectOutros('a-prof-select', 'a-prof-outros');
 
-    // ====== ENVIO COM LOG DETALHADO ======
     async function enviar(payload) {
       console.log('Payload enviado:', payload);
 
@@ -524,7 +522,6 @@
       try { return JSON.parse(text); } catch { return text; }
     }
 
-    // ====== MONTA O PAYLOAD E ENVIA ======
     function wireForm(formId, okId, okLinkId, tabName, prefixo) {
       const form = document.getElementById(formId);
       const link = document.getElementById(okLinkId);
@@ -537,7 +534,6 @@
         e.preventDefault();
         const fd = new FormData(form);
 
-        // === Tema (funciona para visita com select+Outros e para apoio com campo texto "tema")
         const temaSelect = (fd.get('tema_select') || '').toString().trim();
         const temaOutros = (fd.get('tema_outros') || '').toString().trim();
         const temaDireto = (fd.get('tema') || '').toString().trim();
@@ -553,7 +549,6 @@
           temaFinal = temaDireto;
         }
 
-        // === PECs (select + Outros, com fallback pro campo texto antigo se existir)
         const profSelect = (fd.get('professores_select') || '').toString().trim();
         const profOutros = (fd.get('professores_outros') || '').toString().trim();
         const profDireto = (fd.get('professores') || '').toString().trim();
