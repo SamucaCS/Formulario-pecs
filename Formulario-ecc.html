@@ -1,605 +1,954 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Cadastro – Visitas e Apoio Presencial (PECs)</title>
+  <title>PECs – Cadastro de Visitas e Apoio Presencial</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0f172a;
-      --card: #111827;
-      --muted: #94a3b8;
-      --text: #e5e7eb;
-      --accent: #22d3ee;
-      --accent-2: #10b981;
-      --danger: #ef4444;
-      --warning: #f59e0b;
-      --radius: 16px
+      --ink:    #0a0a0f;
+      --paper:  #f5f3ef;
+      --panel:  #ffffff;
+      --muted:  #6b7280;
+      --border: #e0ddd8;
+
+      --cyan:   #00c2ff;
+      --green:  #00e5a0;
+      --coral:  #ff4f6a;
+      --amber:  #ffb800;
+      --purple: #7c3aed;
+
+      --grad-v: linear-gradient(135deg, #00c2ff 0%, #00e5a0 100%);
+      --grad-a: linear-gradient(135deg, #ff4f6a 0%, #ffb800 100%);
+
+      --radius: 20px;
+      --shadow: 0 8px 40px rgba(0,0,0,.10);
     }
 
-    * {
-      box-sizing: border-box
-    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    html,
+    html { scroll-behavior: smooth; }
+
     body {
-      margin: 0
-    }
-
-    body {
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans";
-      background: linear-gradient(135deg, #0b1025 0%, #0f172a 40%, #0b2530 100%);
-      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      background: var(--paper);
+      color: var(--ink);
       min-height: 100vh;
-      padding: 24px
+      padding: 0;
+      overflow-x: hidden;
     }
 
-    .container {
-      max-width: 980px;
-      margin: 0 auto
+    /* ── HERO BAND ── */
+    .hero {
+      position: relative;
+      background: var(--ink);
+      padding: 48px 32px 80px;
+      overflow: hidden;
     }
-
-    header {
-      display: flex;
-      gap: 12px;
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 80% at 80% 50%, rgba(0,194,255,.18) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 60% at 10% 80%, rgba(0,229,160,.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-noise {
+      position: absolute;
+      inset: 0;
+      opacity: .03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 200px;
+    }
+    .hero-inner {
+      position: relative;
+      max-width: 860px;
+      margin: 0 auto;
+    }
+    .hero-eyebrow {
+      display: inline-flex;
       align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      margin-bottom: 16px
+      gap: 8px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: 999px;
+      padding: 6px 14px;
+      font-size: .75rem;
+      font-weight: 500;
+      color: rgba(255,255,255,.7);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    .hero-eyebrow span {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: .5; transform: scale(1.4); }
+    }
+    .hero h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.1;
+      letter-spacing: -.02em;
+      margin-bottom: 12px;
+    }
+    .hero h1 em {
+      font-style: normal;
+      background: var(--grad-v);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-sub {
+      color: rgba(255,255,255,.5);
+      font-size: .95rem;
+      font-weight: 300;
+      max-width: 480px;
+    }
+    .hero-nav {
+      position: absolute;
+      top: 0; right: 0;
+    }
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+      color: rgba(255,255,255,.7);
+      font-size: .82rem;
+      font-weight: 500;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 999px;
+      padding: 8px 16px;
+      transition: all .2s;
+    }
+    .btn-ghost:hover {
+      background: rgba(255,255,255,.08);
+      color: #fff;
+      border-color: rgba(255,255,255,.35);
     }
 
-    h1 {
-      font-size: 1.35rem;
-      margin: 0
+    /* ── TAB SWITCHER ── */
+    .tab-band {
+      background: var(--ink);
+      padding: 0 32px;
+    }
+    .tab-band-inner {
+      max-width: 860px;
+      margin: 0 auto;
+      display: flex;
+      gap: 4px;
+    }
+    .tab-btn {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 20px;
+      border: 0;
+      background: transparent;
+      color: rgba(255,255,255,.4);
+      font-family: 'DM Sans', sans-serif;
+      font-size: .88rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: color .2s;
+      border-bottom: 2px solid transparent;
+    }
+    .tab-btn .tab-icon {
+      width: 28px; height: 28px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+      background: rgba(255,255,255,.06);
+      transition: background .2s;
+    }
+    .tab-btn.active {
+      color: #fff;
+      border-bottom-color: var(--cyan);
+    }
+    .tab-btn.active .tab-icon {
+      background: linear-gradient(135deg, rgba(0,194,255,.3), rgba(0,229,160,.3));
+    }
+    .tab-btn[data-tab="apoio"].active {
+      border-bottom-color: var(--coral);
+    }
+    .tab-btn[data-tab="apoio"].active .tab-icon {
+      background: linear-gradient(135deg, rgba(255,79,106,.3), rgba(255,184,0,.3));
     }
 
-    .card {
-      background: linear-gradient(180deg, rgba(255, 255, 255, .04), rgba(0, 0, 0, .12));
-      border: 1px solid rgba(255, 255, 255, .08);
+    /* ── MAIN ── */
+    .main {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 40px 32px 80px;
+    }
+
+    /* ── PANELS ── */
+    .panel { display: none; }
+    .panel.active { display: block; animation: fadeUp .35s ease both; }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── SECTION LABEL ── */
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+    .section-badge {
+      width: 36px; height: 36px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    .badge-visita { background: linear-gradient(135deg, #00c2ff22, #00e5a022); border: 1px solid #00c2ff44; }
+    .badge-apoio  { background: linear-gradient(135deg, #ff4f6a22, #ffb80022); border: 1px solid #ff4f6a44; }
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      letter-spacing: -.01em;
+    }
+    .section-desc {
+      font-size: .82rem;
+      color: var(--muted);
+      font-weight: 300;
+    }
+
+    /* ── FORM CARD ── */
+    .form-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
       border-radius: var(--radius);
-      box-shadow: 0 6px 24px rgba(0, 0, 0, .35);
-      margin-bottom: 16px
+      box-shadow: var(--shadow);
+      overflow: hidden;
     }
 
-    form {
-      padding: 16px
-    }
-
+    /* ── FORM GRID ── */
+    .form-body { padding: 28px; }
     .grid {
       display: grid;
-      gap: 12px;
-      grid-template-columns: repeat(12, 1fr)
+      gap: 20px;
+      grid-template-columns: repeat(12, 1fr);
+    }
+    .col-12 { grid-column: span 12; }
+    .col-8  { grid-column: span 8;  }
+    .col-6  { grid-column: span 6;  }
+    .col-4  { grid-column: span 4;  }
+    @media (max-width: 640px) {
+      .col-8, .col-6, .col-4 { grid-column: span 12; }
     }
 
-    .col-6 {
-      grid-column: span 6
-    }
-
-    .col-3 {
-      grid-column: span 3
-    }
-
-    .col-12 {
-      grid-column: span 12
-    }
-
-    @media (max-width:860px) {
-
-      .col-6,
-      .col-3 {
-        grid-column: span 12
-      }
-    }
-
-    label {
-      display: block;
-      font-size: .88rem;
+    /* ── FIELD ── */
+    .field { display: flex; flex-direction: column; gap: 6px; }
+    .field-label {
+      font-size: .78rem;
+      font-weight: 500;
       color: var(--muted);
-      margin: 2px 0 6px
+      text-transform: uppercase;
+      letter-spacing: .06em;
     }
+    .field-label span { color: var(--coral); margin-left: 2px; }
 
-    input,
-    textarea,
-    select {
+    input, select, textarea {
       width: 100%;
-      background: #0b1226;
-      border: 1px solid rgba(255, 255, 255, .1);
-      color: var(--text);
-      padding: 12px;
-      border-radius: 12px;
-      outline: none
+      background: #fafaf8;
+      border: 1.5px solid var(--border);
+      color: var(--ink);
+      padding: 12px 16px;
+      border-radius: 14px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: .92rem;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s, background .2s;
+      appearance: none;
+      -webkit-appearance: none;
     }
-
-    textarea {
-      min-height: 70px;
-      resize: vertical
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--cyan);
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(0,194,255,.12);
     }
+    .panel-apoio input:focus,
+    .panel-apoio select:focus,
+    .panel-apoio textarea:focus {
+      border-color: var(--coral);
+      box-shadow: 0 0 0 3px rgba(255,79,106,.12);
+    }
+    textarea { min-height: 90px; resize: vertical; }
 
-    .tema-outros {
+    /* select arrow */
+    .select-wrap { position: relative; }
+    .select-wrap::after {
+      content: '▾';
+      position: absolute;
+      right: 14px; top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      font-size: .8rem;
+      pointer-events: none;
+    }
+    select { padding-right: 36px; cursor: pointer; }
+
+    /* outros input */
+    .outros-input {
+      display: none;
       margin-top: 8px;
-      display: none;
+      animation: fadeUp .2s ease both;
+    }
+    .outros-input.visible { display: block; }
+
+    /* ── DIVIDER ── */
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 0 28px;
     }
 
-    .actions {
+    /* ── FORM FOOTER ── */
+    .form-footer {
+      padding: 20px 28px;
       display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-top: 10px
-    }
-
-    button {
-      border: 0;
-      cursor: pointer;
-      border-radius: 12px;
-      padding: 10px 14px;
-      font-weight: 700
-    }
-
-    .btn-primary {
-      background: var(--accent);
-      color: #03222c
-    }
-
-    .btn-secondary {
-      background: #0b1226;
-      color: var(--text);
-      border: 1px solid rgba(255, 255, 255, .15)
-    }
-
-    .ok {
-      display: none;
-      margin: 10px 16px 18px;
-      color: #10b981
-    }
-
-    .links {
-      display: flex;
-      gap: 8px;
       align-items: center;
-      margin: 6px 0 18px
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      background: #fafaf8;
+    }
+    .btn-submit {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 13px 28px;
+      border: 0;
+      border-radius: 14px;
+      font-family: 'Syne', sans-serif;
+      font-size: .92rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform .15s, box-shadow .15s, filter .15s;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-submit::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,0);
+      transition: background .15s;
+    }
+    .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.18); }
+    .btn-submit:hover::after { background: rgba(255,255,255,.08); }
+    .btn-submit:active { transform: translateY(0); }
+
+    .btn-submit-visita {
+      background: var(--grad-v);
+      color: var(--ink);
+    }
+    .btn-submit-apoio {
+      background: var(--grad-a);
+      color: #fff;
+    }
+    .btn-submit .arrow {
+      width: 22px; height: 22px;
+      background: rgba(0,0,0,.12);
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px;
     }
 
-    a.btn {
-      display: inline-block;
-      text-decoration: none
+    .btn-reset {
+      background: transparent;
+      border: 1.5px solid var(--border);
+      color: var(--muted);
+      font-family: 'DM Sans', sans-serif;
+      font-size: .85rem;
+      padding: 12px 20px;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .btn-reset:hover { border-color: #aaa; color: var(--ink); }
+
+    /* ── SUCCESS TOAST ── */
+    .toast {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      font-size: .85rem;
+      font-weight: 500;
+      animation: toastIn .3s ease both;
+    }
+    @keyframes toastIn {
+      from { opacity: 0; transform: scale(.95); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+    .toast.show { display: flex; }
+    .toast-visita {
+      background: linear-gradient(90deg, rgba(0,229,160,.12), rgba(0,194,255,.08));
+      border: 1px solid rgba(0,229,160,.3);
+      color: #059669;
+    }
+    .toast-apoio {
+      background: linear-gradient(90deg, rgba(255,79,106,.08), rgba(255,184,0,.08));
+      border: 1px solid rgba(255,79,106,.25);
+      color: #dc2626;
+    }
+    .toast a {
+      margin-left: auto;
+      font-size: .78rem;
+      color: inherit;
+      opacity: .7;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    /* ── STATS BAR ── */
+    .stats-bar {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+    .stat-chip {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: .78rem;
+      color: var(--muted);
+    }
+    .stat-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+    }
+    .dot-visita { background: var(--cyan); }
+    .dot-apoio  { background: var(--coral); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      .hero { padding: 36px 20px 60px; }
+      .tab-band { padding: 0 20px; }
+      .main { padding: 28px 20px 60px; }
+      .form-body { padding: 20px; }
+      .form-footer { padding: 16px 20px; }
+      .divider { margin: 0 20px; }
     }
   </style>
 </head>
-
 <body>
-  <div class="container">
-    <header>
-      <h1>Cadastro – Visitas e Apoio Presencial (PECs)</h1>
-      <div class="links">
-        <a class="btn btn-secondary" href="./resultado-ecc.html">Ver resultados</a>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-noise"></div>
+  <div class="hero-inner">
+    <nav class="hero-nav">
+      <a class="btn-ghost" href="./resultado-ecc.html">
+        Ver resultados →
+      </a>
+    </nav>
+    <div class="hero-eyebrow"><span></span> Diretoria de Ensino – Região de Suzano</div>
+    <h1>Visitas &amp; Apoio<br><em>Presencial PECs</em></h1>
+    <p class="hero-sub">Registre as ações dos Professores Coordenadores de Escola de forma rápida e precisa.</p>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tab-band">
+  <div class="tab-band-inner">
+    <button class="tab-btn active" data-tab="visita">
+      <span class="tab-icon">🏫</span> Visita
+    </button>
+    <button class="tab-btn" data-tab="apoio">
+      <span class="tab-icon">🤝</span> Apoio Presencial
+    </button>
+  </div>
+</div>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- PANEL VISITA -->
+  <div class="panel panel-visita active" id="panel-visita">
+    <div class="section-label">
+      <div class="section-badge badge-visita">🏫</div>
+      <div>
+        <div class="section-title">Nova Visita</div>
+        <div class="section-desc">Registre a visita do PEC à escola.</div>
       </div>
-    </header>
+    </div>
 
-    <!-- VISITAS -->
-    <section class="card" aria-labelledby="titulo-visitas">
-      <form id="form-visitas">
-        <h2 id="titulo-visitas" style="margin:0 0 8px;font-size:1rem">Nova visita</h2>
-        <div class="grid">
-          <div class="col-6">
-            <label for="v-prof-select">Professores PECs</label>
-            <select id="v-prof-select" name="professores_select" required>
-              <option value="" disabled selected>Selecione o PEC…</option>
-              <option value="DANIELLA LUSNI DE SOUZA - CEC">DANIELLA LUSNI DE SOUZA - CEC</option>
-              <option value="ALESSANDRA WINK">ALESSANDRA WINK</option>
-              <option value="ANA DEISE LAVOR FIRMINO">ANA DEISE LAVOR FIRMINO</option>
-              <option value="ANA PAULA CAMPOS GUERRA">ANA PAULA CAMPOS GUERRA</option>
-              <option value="AMANDA PAULA RODRIGUES TEIXEIRA">AMANDA PAULA RODRIGUES TEIXEIRA</option>
-              <option value="ARI OLIVEIRA CARVALHO JUNIOR">ARI OLIVEIRA CARVALHO JUNIOR</option>
-              <option value="CAMILA SANTOS ROCHA">CAMILA SANTOS ROCHA</option>
-              <option value="CARLOS M PRECECHAN">CARLOS M PRECECHAN</option>
-              <option value="CLAUDIA BARBOSA SANTANA MIRANDOLA">CLAUDIA BARBOSA SANTANA MIRANDOLA</option>
-              <option value="FÁBIO DE PAULA FERRAZ">FÁBIO DE PAULA FERRAZ</option>
-              <option value="FABIANA GOMES RAMOS DA SILVA">FABIANA GOMES RAMOS DA SILVA</option>
-              <option value="JÉSSICA SOUZA KUMAGAI">JÉSSICA SOUZA KUMAGAI</option>
-              <option value="JOSÉ VANDEI SILVA DE OLIVEIRA">JOSÉ VANDEI SILVA DE OLIVEIRA</option>
-               <option value="Juliana Francisco de Oliveira Jaques">Juliana Francisco de Oliveira Jaques</option>
-              <option value="LAIS GUIMARÃES FURST">LAIS GUIMARÃES FURST</option>
-              <option value="LUCAS DA COSTA HENRIQUE">LUCAS DA COSTA HENRIQUE</option>
-              <option value="MARCELO VICENTE CAVALCANTE DA SILVA">MARCELO VICENTE CAVALCANTE DA SILVA</option>
-              <option value="Mariana Pereira Santana">Mariana Pereira Santana</option>
-              <option value="MARINETE PEREIRA DE SOUZA OLIVEIRA">MARINETE PEREIRA DE SOUZA OLIVEIRA</option>
-              <option value="MIDIAN DE ALMEIDA PEREIRA">MIDIAN DE ALMEIDA PEREIRA</option>
-              <option value="NÚBIA MIRANDA DA SILVA">NÚBIA MIRANDA DA SILVA</option>
-              <option value="PAULA MARGARETE ALVES">PAULA MARGARETE ALVES</option>
-              <option value="PRISCILA RIBEIRO DA SILVA">PRISCILA RIBEIRO DA SILVA</option>
-              <option value="RAMILCA MORAIS DE ANDRADE">RAMILCA MORAIS DE ANDRADE</option>
-              <option value="RENATO BENEDITO">RENATO BENEDITO</option>
-              <option value="SANDRA REGINA SOARES CLEMENTE">SANDRA REGINA SOARES CLEMENTE</option>
-              <option value="SIMONE BARONE YOSHIOKA SALERMO">SIMONE BARONE YOSHIOKA SALERMO</option>
-              <option value="THAIS ALEKSEJUK BERNARDES">THAIS ALEKSEJUK BERNARDES</option>
-              <option value="Valéria Santos França">Valéria Santos França</option>
-              <option value="VERÔNICA DE FREITAS FIORI">VERÔNICA DE FREITAS FIORI</option>
+    <div class="form-card">
+      <form id="form-visitas" novalidate>
+        <div class="form-body">
+          <div class="grid">
 
-            </select>
-            <input id="v-prof-outros" name="professores_outros" type="text" class="tema-outros"
-              placeholder="Digite o nome do PEC" />
-          </div>
+            <!-- PEC -->
+            <div class="col-8 field">
+              <label class="field-label" for="v-prof-select">Professor PEC <span>*</span></label>
+              <div class="select-wrap">
+                <select id="v-prof-select" name="professores_select" required>
+                  <option value="" disabled selected>Selecione o PEC…</option>
+                  <option value="ALESSANDRA WINK">ALESSANDRA WINK</option>
+                  <option value="AMANDA PAULA RODRIGUES TEIXEIRA">AMANDA PAULA RODRIGUES TEIXEIRA</option>
+                  <option value="ANA DEISE LAVOR FIRMINO">ANA DEISE LAVOR FIRMINO</option>
+                  <option value="ANA PAULA CAMPOS GUERRA">ANA PAULA CAMPOS GUERRA</option>
+                  <option value="ARI OLIVEIRA CARVALHO JUNIOR">ARI OLIVEIRA CARVALHO JUNIOR</option>
+                  <option value="CAMILA SANTOS ROCHA">CAMILA SANTOS ROCHA</option>
+                  <option value="CARLOS M PRECECHAN">CARLOS M PRECECHAN</option>
+                  <option value="CLAUDIA BARBOSA SANTANA MIRANDOLA">CLAUDIA BARBOSA SANTANA MIRANDOLA</option>
+                  <option value="DANIELLA LUSNI DE SOUZA - CEC">DANIELLA LUSNI DE SOUZA - CEC</option>
+                  <option value="FABIANA GOMES RAMOS DA SILVA">FABIANA GOMES RAMOS DA SILVA</option>
+                  <option value="FÁBIO DE PAULA FERRAZ">FÁBIO DE PAULA FERRAZ</option>
+                  <option value="JÉSSICA SOUZA KUMAGAI">JÉSSICA SOUZA KUMAGAI</option>
+                  <option value="JOSÉ VANDEI SILVA DE OLIVEIRA">JOSÉ VANDEI SILVA DE OLIVEIRA</option>
+                  <option value="Juliana Francisco de Oliveira Jaques">Juliana Francisco de Oliveira Jaques</option>
+                  <option value="LAIS GUIMARÃES FURST">LAIS GUIMARÃES FURST</option>
+                  <option value="LUCAS DA COSTA HENRIQUE">LUCAS DA COSTA HENRIQUE</option>
+                  <option value="MARCELO VICENTE CAVALCANTE DA SILVA">MARCELO VICENTE CAVALCANTE DA SILVA</option>
+                  <option value="Mariana Pereira Santana">Mariana Pereira Santana</option>
+                  <option value="MARINETE PEREIRA DE SOUZA OLIVEIRA">MARINETE PEREIRA DE SOUZA OLIVEIRA</option>
+                  <option value="MIDIAN DE ALMEIDA PEREIRA">MIDIAN DE ALMEIDA PEREIRA</option>
+                  <option value="NÚBIA MIRANDA DA SILVA">NÚBIA MIRANDA DA SILVA</option>
+                  <option value="PAULA MARGARETE ALVES">PAULA MARGARETE ALVES</option>
+                  <option value="PRISCILA RIBEIRO DA SILVA">PRISCILA RIBEIRO DA SILVA</option>
+                  <option value="RAMILCA MORAIS DE ANDRADE">RAMILCA MORAIS DE ANDRADE</option>
+                  <option value="RENATO BENEDITO">RENATO BENEDITO</option>
+                  <option value="SANDRA REGINA SOARES CLEMENTE">SANDRA REGINA SOARES CLEMENTE</option>
+                  <option value="SIMONE BARONE YOSHIOKA SALERMO">SIMONE BARONE YOSHIOKA SALERMO</option>
+                  <option value="THAIS ALEKSEJUK BERNARDES">THAIS ALEKSEJUK BERNARDES</option>
+                  <option value="Valéria Santos França">Valéria Santos França</option>
+                  <option value="VERÔNICA DE FREITAS FIORI">VERÔNICA DE FREITAS FIORI</option>
+                </select>
+              </div>
+              <input id="v-prof-outros" name="professores_outros" type="text" class="outros-input" placeholder="Digite o nome do PEC" />
+            </div>
 
-          <div class="col-3">
-            <label for="v-data">Data</label>
-            <input id="v-data" name="data" type="date" required />
-          </div>
+            <!-- DATA -->
+            <div class="col-4 field">
+              <label class="field-label" for="v-data">Data <span>*</span></label>
+              <input id="v-data" name="data" type="date" required />
+            </div>
 
-          <div class="col-3">
-            <label for="v-escola">Escola</label>
-            <select id="v-escola" name="escola" required>
-              <option value="" disabled selected>Selecione a escola…</option>
-              <option>ALFREDO ROBERTO</option>
-              <option>ALICE ROMANOS PROFESSORA</option>
-              <option>ANDERSON DA SILVA SOARES</option>
-              <option>ANGELA SUELI PONTES DIAS PROFESSORA</option>
-              <option>ANIS FADUL DOUTOR</option>
-              <option>ANTONIO BRASILIO MENEZES DA FONSECA PROFESSOR</option>
-              <option>ANTONIO GARCIA VEREADOR</option>
-              <option>ANTONIO JOSE CAMPOS DE MENEZES PROFESSOR</option>
-              <option>ANTONIO RODRIGUES DE ALMEIDA</option>
-              <option>ANTONIO VALDEMAR GALO VEREADOR</option>
-              <option>BATISTA RENZI</option>
-              <option>BENEDITA DE CAMPOS MARCOLONGO PROFESSORA</option>
-              <option>BRASILIO MACHADO NETO COMENDADOR</option>
-              <option>CARLINDO REIS</option>
-              <option>CARLOS MOLTENI PROFESSOR</option>
-              <option>CHOJIRO SEGAWA</option>
-              <option>CONJUNTO HABITACIONAL PARQUE DOURADO II</option>
-              <option>DAVID JORGE CURI PROFESSOR</option>
-              <option>EDIR DO COUTO ROSA PROFESSOR</option>
-              <option>ELIANE APARECIDA DANTAS DA SILVA PROFESSORA</option>
-              <option>EUCLIDES IGESCA</option>
-              <option>GERALDO JUSTINIANO DE REZENDE SILVA PROFESSOR</option>
-              <option>GILBERTO DE CARVALHO PROFESSOR</option>
-              <option>GIOVANNI BATTISTA RAFFO PROFESSOR DOUTOR</option>
-              <option>HELENA ZERRENNER</option>
-              <option>IGNES CORREA ALLEN PROFESSORA</option>
-              <option>IIJIMA</option>
-              <option>JACQUES YVES COUSTEAU COMANDANTE</option>
-              <option>JANDYRA COUTINHO PROFESSORA</option>
-              <option>JARDIM SAO PAULO II</option>
-              <option>JOSE BENEDITO LEITE BARTHOLOMEI PROFESSOR</option>
-              <option>JOSE CAMILO DE ANDRADE</option>
-              <option>JOSE EDUARDO VIEIRA RADUAN DOUTOR</option>
-              <option>JOSE PAPAIZ PROFESSOR</option>
-              <option>JOVIANO SATLER DE LIMA PROFESSOR</option>
-              <option>JUSSARA FEITOSA DOMSCHKE PROFESSORA</option>
-              <option>JUSTINO MARCONDES RANGEL PROFESSOR</option>
-              <option>LANDIA SANTOS BATISTA PROFESSORA</option>
-              <option>LEDA FERNANDES LOPES PROFESSORA</option>
-              <option>LUCY FRANCO KOWALSKI PROFESSORA</option>
-              <option>LUIZ BIANCONI</option>
-              <option>LUIZA HIDAKA PROFESSORA</option>
-              <option>MANUEL DOS SANTOS PAIVA</option>
-              <option>MARIA ELISA DE AZEVEDO CINTRA PROFESSORA</option>
-              <option>MARIO MANOEL DANTAS DE AQUINO PROFESSOR</option>
-              <option>MARTHA CALIXTO CAZAGRANDE</option>
-              <option>MASAITI SEKINE PROFESSOR</option>
-              <option>MORATO DE OLIVEIRA DOUTOR</option>
-              <option>OLAVO LEONEL FERREIRA PROFESSOR</option>
-              <option>OLZANETTI GOMES PROFESSOR</option>
-              <option>OSWALDO DE OLIVEIRA LIMA</option>
-              <option>PAULO AMERICO PAGANUCCI PROFESSOR</option>
-              <option>PAULO KOBAYASHI PROFESSOR</option>
-              <option>RAUL BRASIL PROFESSOR</option>
-              <option>ROBERTO BIANCHI</option>
-              <option>SEBASTIAO PEREIRA VIDAL</option>
-              <option>TACITO ZANCHETTA PREFEITO</option>
-              <option>TOCHICHICO YOCHICAVA PROFESSOR</option>
-              <option>TOKUZO TERAZAKI</option>
-              <option>YOLANDA BASSI PROFESSORA</option>
-              <option>ZEIKICHI FUKUOKA</option>
-              <option>ZELIA GATTAI AMADO</option>
-            </select>
-          </div>
+            <!-- ESCOLA -->
+            <div class="col-12 field">
+              <label class="field-label" for="v-escola">Escola <span>*</span></label>
+              <div class="select-wrap">
+                <select id="v-escola" name="escola" required>
+                  <option value="" disabled selected>Selecione a escola…</option>
+                  <option>ALFREDO ROBERTO</option>
+                  <option>ALICE ROMANOS PROFESSORA</option>
+                  <option>ANDERSON DA SILVA SOARES</option>
+                  <option>ANGELA SUELI PONTES DIAS PROFESSORA</option>
+                  <option>ANIS FADUL DOUTOR</option>
+                  <option>ANTONIO BRASILIO MENEZES DA FONSECA PROFESSOR</option>
+                  <option>ANTONIO GARCIA VEREADOR</option>
+                  <option>ANTONIO JOSE CAMPOS DE MENEZES PROFESSOR</option>
+                  <option>ANTONIO RODRIGUES DE ALMEIDA</option>
+                  <option>ANTONIO VALDEMAR GALO VEREADOR</option>
+                  <option>BATISTA RENZI</option>
+                  <option>BENEDITA DE CAMPOS MARCOLONGO PROFESSORA</option>
+                  <option>BRASILIO MACHADO NETO COMENDADOR</option>
+                  <option>CARLINDO REIS</option>
+                  <option>CARLOS MOLTENI PROFESSOR</option>
+                  <option>CHOJIRO SEGAWA</option>
+                  <option>CONJUNTO HABITACIONAL PARQUE DOURADO II</option>
+                  <option>DAVID JORGE CURI PROFESSOR</option>
+                  <option>EDIR DO COUTO ROSA PROFESSOR</option>
+                  <option>ELIANE APARECIDA DANTAS DA SILVA PROFESSORA</option>
+                  <option>EUCLIDES IGESCA</option>
+                  <option>GERALDO JUSTINIANO DE REZENDE SILVA PROFESSOR</option>
+                  <option>GILBERTO DE CARVALHO PROFESSOR</option>
+                  <option>GIOVANNI BATTISTA RAFFO PROFESSOR DOUTOR</option>
+                  <option>HELENA ZERRENNER</option>
+                  <option>IGNES CORREA ALLEN PROFESSORA</option>
+                  <option>IIJIMA</option>
+                  <option>JACQUES YVES COUSTEAU COMANDANTE</option>
+                  <option>JANDYRA COUTINHO PROFESSORA</option>
+                  <option>JARDIM SAO PAULO II</option>
+                  <option>JOSE BENEDITO LEITE BARTHOLOMEI PROFESSOR</option>
+                  <option>JOSE CAMILO DE ANDRADE</option>
+                  <option>JOSE EDUARDO VIEIRA RADUAN DOUTOR</option>
+                  <option>JOSE PAPAIZ PROFESSOR</option>
+                  <option>JOVIANO SATLER DE LIMA PROFESSOR</option>
+                  <option>JUSSARA FEITOSA DOMSCHKE PROFESSORA</option>
+                  <option>JUSTINO MARCONDES RANGEL PROFESSOR</option>
+                  <option>LANDIA SANTOS BATISTA PROFESSORA</option>
+                  <option>LEDA FERNANDES LOPES PROFESSORA</option>
+                  <option>LUCY FRANCO KOWALSKI PROFESSORA</option>
+                  <option>LUIZ BIANCONI</option>
+                  <option>LUIZA HIDAKA PROFESSORA</option>
+                  <option>MANUEL DOS SANTOS PAIVA</option>
+                  <option>MARIA ELISA DE AZEVEDO CINTRA PROFESSORA</option>
+                  <option>MARIO MANOEL DANTAS DE AQUINO PROFESSOR</option>
+                  <option>MARTHA CALIXTO CAZAGRANDE</option>
+                  <option>MASAITI SEKINE PROFESSOR</option>
+                  <option>MORATO DE OLIVEIRA DOUTOR</option>
+                  <option>OLAVO LEONEL FERREIRA PROFESSOR</option>
+                  <option>OLZANETTI GOMES PROFESSOR</option>
+                  <option>OSWALDO DE OLIVEIRA LIMA</option>
+                  <option>PAULO AMERICO PAGANUCCI PROFESSOR</option>
+                  <option>PAULO KOBAYASHI PROFESSOR</option>
+                  <option>RAUL BRASIL PROFESSOR</option>
+                  <option>ROBERTO BIANCHI</option>
+                  <option>SEBASTIAO PEREIRA VIDAL</option>
+                  <option>TACITO ZANCHETTA PREFEITO</option>
+                  <option>TOCHICHICO YOCHICAVA PROFESSOR</option>
+                  <option>TOKUZO TERAZAKI</option>
+                  <option>YOLANDA BASSI PROFESSORA</option>
+                  <option>ZEIKICHI FUKUOKA</option>
+                  <option>ZELIA GATTAI AMADO</option>
+                </select>
+              </div>
+            </div>
 
-          <div class="col-12">
-            <label for="v-tema-select">Tema</label>
-            <select id="v-tema-select" name="tema_select" required>
-              <option value="" disabled selected>Selecione o tema…</option>
-              <option value="ROTEIRO SEDUC">ROTEIRO SEDUC</option>
-              <option value="PLATAFORMAS">PLATAFORMAS</option>
-              <option value="ALUNO PRESENTE">ALUNO PRESENTE</option>
-              <option value="FORMAÇÃO">FORMAÇÃO</option>
-              <option value="FLUÊNCIA LEITORA">FLUÊNCIA LEITORA</option>
-              <option value="CONVIVA">CONVIVA</option>
-              <option value="SAEB/SARESP">SAEB/SARESP</option>
-              <option value="Multiplica">Multiplica</option>
-              <option value="Educação Profissional Técnica - EPT">Educação Profissional Técnica - EPT</option>
-              <option value="Outros">Outros</option>
-            </select>
-            <input id="v-tema-outros" name="tema_outros" type="text" class="tema-outros"
-              placeholder="Descreva o tema" />
-          </div>
+            <!-- TEMA -->
+            <div class="col-12 field">
+              <label class="field-label" for="v-tema-select">Tema <span>*</span></label>
+              <div class="select-wrap">
+                <select id="v-tema-select" name="tema_select" required>
+                  <option value="" disabled selected>Selecione o tema…</option>
+                  <option value="ROTEIRO SEDUC">ROTEIRO SEDUC</option>
+                  <option value="PLATAFORMAS">PLATAFORMAS</option>
+                  <option value="ALUNO PRESENTE">ALUNO PRESENTE</option>
+                  <option value="FORMAÇÃO">FORMAÇÃO</option>
+                  <option value="FLUÊNCIA LEITORA">FLUÊNCIA LEITORA</option>
+                  <option value="CONVIVA">CONVIVA</option>
+                  <option value="SAEB/SARESP">SAEB/SARESP</option>
+                  <option value="Multiplica">Multiplica</option>
+                  <option value="Educação Profissional Técnica - EPT">Educação Profissional Técnica - EPT</option>
+                  <option value="Outros">Outros…</option>
+                </select>
+              </div>
+              <input id="v-tema-outros" name="tema_outros" type="text" class="outros-input" placeholder="Descreva o tema" />
+            </div>
 
-          <div class="col-12">
-            <label for="v-obs">Observações (opcional)</label>
-            <textarea id="v-obs" name="obs"
-              placeholder="Registre detalhes importantes, encaminhamentos, responsáveis, etc."></textarea>
+            <!-- OBS -->
+            <div class="col-12 field">
+              <label class="field-label" for="v-obs">Observações</label>
+              <textarea id="v-obs" name="obs" placeholder="Registre detalhes, encaminhamentos, responsáveis…"></textarea>
+            </div>
+
           </div>
         </div>
-        <div class="actions">
-          <button type="submit" class="btn-primary">Adicionar visita</button>
-          <button type="reset" class="btn-secondary">Limpar</button>
+
+        <div class="divider"></div>
+        <div class="form-footer">
+          <div>
+            <div id="toast-visita" class="toast toast-visita">
+              ✓ Visita registrada com sucesso!
+              <a href="./resultado-ecc.html?tab=visitas">Ver resultados →</a>
+            </div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:center;">
+            <button type="reset" class="btn-reset">Limpar</button>
+            <button type="submit" class="btn-submit btn-submit-visita">
+              Registrar visita <span class="arrow">→</span>
+            </button>
+          </div>
         </div>
-        <p class="ok" id="ok-visitas">✓ Visita salva.
-          <a id="ok-link-visitas" class="btn btn-secondary" href="./resultado-ecc.html?tab=visitas">Ver resultados</a>
-        </p>
       </form>
-    </section>
-
-    <!-- APOIO PRESENCIAL -->
-    <section class="card" aria-labelledby="titulo-apoio">
-      <form id="form-apoio">
-        <h2 id="titulo-apoio" style="margin:0 0 8px;font-size:1rem">Novo apoio presencial</h2>
-        <div class="grid">
-          <div class="col-6">
-            <label for="a-prof-select">Professores PECs</label>
-            <select id="a-prof-select" name="professores_select" required>
-              <option value="" disabled selected>Selecione o PEC…</option>
-              <option value="DANIELLA LUSNI DE SOUZA - CEC">DANIELLA LUSNI DE SOUZA - CEC</option>
-              <option value="ALESSANDRA WINK">ALESSANDRA WINK</option>
-              <option value="ANA DEISE LAVOR FIRMINO">ANA DEISE LAVOR FIRMINO</option>
-              <option value="ANA PAULA CAMPOS GUERRA">ANA PAULA CAMPOS GUERRA</option>
-              <option value="AMANDA PAULA RODRIGUES TEIXEIRA">AMANDA PAULA RODRIGUES TEIXEIRA</option>
-              <option value="ARI OLIVEIRA CARVALHO JUNIOR">ARI OLIVEIRA CARVALHO JUNIOR</option>
-              <option value="CAMILA SANTOS ROCHA">CAMILA SANTOS ROCHA</option>
-              <option value="CARLOS M PRECECHAN">CARLOS M PRECECHAN</option>
-              <option value="CLAUDIA BARBOSA SANTANA MIRANDOLA">CLAUDIA BARBOSA SANTANA MIRANDOLA</option>
-              <option value="FÁBIO DE PAULA FERRAZ">FÁBIO DE PAULA FERRAZ</option>
-              <option value="FABIANA GOMES RAMOS DA SILVA">FABIANA GOMES RAMOS DA SILVA</option>
-              <option value="JÉSSICA SOUZA KUMAGAI">JÉSSICA SOUZA KUMAGAI</option>
-              <option value="JOSÉ VANDEI SILVA DE OLIVEIRA">JOSÉ VANDEI SILVA DE OLIVEIRA</option>
-              <option value="Juliana Francisco de Oliveira Jaques">Juliana Francisco de Oliveira Jaques</option>
-              <option value="LAIS GUIMARÃES FURST">LAIS GUIMARÃES FURST</option>
-              <option value="LUCAS DA COSTA HENRIQUE">LUCAS DA COSTA HENRIQUE</option>
-              <option value="MARCELO VICENTE CAVALCANTE DA SILVA">MARCELO VICENTE CAVALCANTE DA SILVA</option>
-              <option value="MARINETE PEREIRA DE SOUZA OLIVEIRA">MARINETE PEREIRA DE SOUZA OLIVEIRA</option>
-              <option value="MIDIAN DE ALMEIDA PEREIRA">MIDIAN DE ALMEIDA PEREIRA</option>
-              <option value="NÚBIA MIRANDA DA SILVA">NÚBIA MIRANDA DA SILVA</option>
-              <option value="PAULA MARGARETE ALVES">PAULA MARGARETE ALVES</option>
-              <option value="PRISCILA RIBEIRO DA SILVA">PRISCILA RIBEIRO DA SILVA</option>
-              <option value="RAMILCA MORAIS DE ANDRADE">RAMILCA MORAIS DE ANDRADE</option>
-              <option value="RENATO BENEDITO">RENATO BENEDITO</option>
-              <option value="SANDRA REGINA SOARES CLEMENTE">SANDRA REGINA SOARES CLEMENTE</option>
-              <option value="SIMONE BARONE YOSHIOKA SALERMO">SIMONE BARONE YOSHIOKA SALERMO</option>
-              <option value="THAIS ALEKSEJUK BERNARDES">THAIS ALEKSEJUK BERNARDES</option>
-              <option value="Valéria Santos França">Valéria Santos França</option>
-              <option value="VERÔNICA DE FREITAS FIORI">VERÔNICA DE FREITAS FIORI</option>
-
-            </select>
-            <input id="a-prof-outros" name="professores_outros" type="text" class="tema-outros"
-              placeholder="Digite o nome do PEC" />
-          </div>
-
-          <div class="col-3">
-            <label for="a-data">Data</label>
-            <input id="a-data" name="data" type="date" required />
-          </div>
-
-          <div class="col-3">
-            <label for="a-escola">Escola</label>
-            <select id="a-escola" name="escola" required>
-              <option value="" disabled selected>Selecione a escola…</option>
-              <option>ALFREDO ROBERTO</option>
-              <option>ALICE ROMANOS PROFESSORA</option>
-              <option>ANDERSON DA SILVA SOARES</option>
-              <option>ANGELA SUELI PONTES DIAS PROFESSORA</option>
-              <option>ANIS FADUL DOUTOR</option>
-              <option>ANTONIO BRASILIO MENEZES DA FONSECA PROFESSOR</option>
-              <option>ANTONIO GARCIA VEREADOR</option>
-              <option>ANTONIO JOSE CAMPOS DE MENEZES PROFESSOR</option>
-              <option>ANTONIO RODRIGUES DE ALMEIDA</option>
-              <option>ANTONIO VALDEMAR GALO VEREADOR</option>
-              <option>BATISTA RENZI</option>
-              <option>BENEDITA DE CAMPOS MARCOLONGO PROFESSORA</option>
-              <option>BRASILIO MACHADO NETO COMENDADOR</option>
-              <option>CARLINDO REIS</option>
-              <option>CARLOS MOLTENI PROFESSOR</option>
-              <option>CHOJIRO SEGAWA</option>
-              <option>CONJUNTO HABITACIONAL PARQUE DOURADO II</option>
-              <option>DAVID JORGE CURI PROFESSOR</option>
-              <option>EDIR DO COUTO ROSA PROFESSOR</option>
-              <option>ELIANE APARECIDA DANTAS DA SILVA PROFESSORA</option>
-              <option>EUCLIDES IGESCA</option>
-              <option>GERALDO JUSTINIANO DE REZENDE SILVA PROFESSOR</option>
-              <option>GILBERTO DE CARVALHO PROFESSOR</option>
-              <option>GIOVANNI BATTISTA RAFFO PROFESSOR DOUTOR</option>
-              <option>HELENA ZERRENNER</option>
-              <option>IGNES CORREA ALLEN PROFESSORA</option>
-              <option>IIJIMA</option>
-              <option>JACQUES YVES COUSTEAU COMANDANTE</option>
-              <option>JANDYRA COUTINHO PROFESSORA</option>
-              <option>JARDIM SAO PAULO II</option>
-              <option>JOSE BENEDITO LEITE BARTHOLOMEI PROFESSOR</option>
-              <option>JOSE CAMILO DE ANDRADE</option>
-              <option>JOSE EDUARDO VIEIRA RADUAN DOUTOR</option>
-              <option>JOSE PAPAIZ PROFESSOR</option>
-              <option>JOVIANO SATLER DE LIMA PROFESSOR</option>
-              <option>JUSSARA FEITOSA DOMSCHKE PROFESSORA</option>
-              <option>JUSTINO MARCONDES RANGEL PROFESSOR</option>
-              <option>LANDIA SANTOS BATISTA PROFESSORA</option>
-              <option>LEDA FERNANDES LOPES PROFESSORA</option>
-              <option>LUCY FRANCO KOWALSKI PROFESSORA</option>
-              <option>LUIZ BIANCONI</option>
-              <option>LUIZA HIDAKA PROFESSORA</option>
-              <option>MANUEL DOS SANTOS PAIVA</option>
-              <option>MARIA ELISA DE AZEVEDO CINTRA PROFESSORA</option>
-              <option>MARIO MANOEL DANTAS DE AQUINO PROFESSOR</option>
-              <option>MARTHA CALIXTO CAZAGRANDE</option>
-              <option>MASAITI SEKINE PROFESSOR</option>
-              <option>MORATO DE OLIVEIRA DOUTOR</option>
-              <option>OLAVO LEONEL FERREIRA PROFESSOR</option>
-              <option>OLZANETTI GOMES PROFESSOR</option>
-              <option>OSWALDO DE OLIVEIRA LIMA</option>
-              <option>PAULO AMERICO PAGANUCCI PROFESSOR</option>
-              <option>PAULO KOBAYASHI PROFESSOR</option>
-              <option>RAUL BRASIL PROFESSOR</option>
-              <option>ROBERTO BIANCHI</option>
-              <option>SEBASTIAO PEREIRA VIDAL</option>
-              <option>TACITO ZANCHETTA PREFEITO</option>
-              <option>TOCHICHICO YOCHICAVA PROFESSOR</option>
-              <option>TOKUZO TERAZAKI</option>
-              <option>YOLANDA BASSI PROFESSORA</option>
-              <option>ZEIKICHI FUKUOKA</option>
-              <option>ZELIA GATTAI AMADO</option>
-            </select>
-          </div>
-
-          <div class="col-12">
-            <label for="a-tema">Componente</label>
-            <input id="a-tema" name="tema" type="text" placeholder="Ex.: Tecnologias educativas; Apoio em sala"
-              required />
-          </div>
-
-          <div class="col-12">
-            <label for="a-obs">Observações (opcional)</label>
-            <textarea id="a-obs" name="obs"
-              placeholder="Detalhes do apoio presencial, responsáveis, encaminhamentos, etc."></textarea>
-          </div>
-        </div>
-        <div class="actions">
-          <button type="submit" class="btn-primary">Adicionar apoio</button>
-          <button type="reset" class="btn-secondary">Limpar</button>
-        </div>
-        <p class="ok" id="ok-apoio">✓ Apoio salvo.
-          <a id="ok-link-apoio" class="btn btn-secondary" href="./resultado-ecc.html?tab=apoio">Ver resultados</a>
-        </p>
-      </form>
-    </section>
+    </div>
   </div>
 
-  <script>
-    const SUPABASE_URL = 'https://xdaanjevbvgqwasjqcew.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkYWFuamV2YnZncXdhc2pxY2V3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIwMDY4NDEsImV4cCI6MjA3NzU4Mjg0MX0.Pf-o3Wa9dLswwd4O8QFcH2v6oXHbvsSXrjIKJMUOz7E';
+  <!-- PANEL APOIO -->
+  <div class="panel panel-apoio" id="panel-apoio">
+    <div class="section-label">
+      <div class="section-badge badge-apoio">🤝</div>
+      <div>
+        <div class="section-title">Novo Apoio Presencial</div>
+        <div class="section-desc">Registre o apoio presencial realizado pelo PEC.</div>
+      </div>
+    </div>
 
-    function deviceType() {
-      return /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) ? 'mobile' : 'desktop';
-    }
+    <div class="form-card">
+      <form id="form-apoio" novalidate>
+        <div class="form-body">
+          <div class="grid">
 
-    function setupSelectOutros(selectId, outrosInputId) {
-      const select = document.getElementById(selectId);
-      const outros = document.getElementById(outrosInputId);
-      if (!select || !outros) return;
+            <!-- PEC -->
+            <div class="col-8 field">
+              <label class="field-label" for="a-prof-select">Professor PEC <span>*</span></label>
+              <div class="select-wrap">
+                <select id="a-prof-select" name="professores_select" required>
+                  <option value="" disabled selected>Selecione o PEC…</option>
+                  <option value="ALESSANDRA WINK">ALESSANDRA WINK</option>
+                  <option value="AMANDA PAULA RODRIGUES TEIXEIRA">AMANDA PAULA RODRIGUES TEIXEIRA</option>
+                  <option value="ANA DEISE LAVOR FIRMINO">ANA DEISE LAVOR FIRMINO</option>
+                  <option value="ANA PAULA CAMPOS GUERRA">ANA PAULA CAMPOS GUERRA</option>
+                  <option value="ARI OLIVEIRA CARVALHO JUNIOR">ARI OLIVEIRA CARVALHO JUNIOR</option>
+                  <option value="CAMILA SANTOS ROCHA">CAMILA SANTOS ROCHA</option>
+                  <option value="CARLOS M PRECECHAN">CARLOS M PRECECHAN</option>
+                  <option value="CLAUDIA BARBOSA SANTANA MIRANDOLA">CLAUDIA BARBOSA SANTANA MIRANDOLA</option>
+                  <option value="DANIELLA LUSNI DE SOUZA - CEC">DANIELLA LUSNI DE SOUZA - CEC</option>
+                  <option value="FABIANA GOMES RAMOS DA SILVA">FABIANA GOMES RAMOS DA SILVA</option>
+                  <option value="FÁBIO DE PAULA FERRAZ">FÁBIO DE PAULA FERRAZ</option>
+                  <option value="JÉSSICA SOUZA KUMAGAI">JÉSSICA SOUZA KUMAGAI</option>
+                  <option value="JOSÉ VANDEI SILVA DE OLIVEIRA">JOSÉ VANDEI SILVA DE OLIVEIRA</option>
+                  <option value="Juliana Francisco de Oliveira Jaques">Juliana Francisco de Oliveira Jaques</option>
+                  <option value="LAIS GUIMARÃES FURST">LAIS GUIMARÃES FURST</option>
+                  <option value="LUCAS DA COSTA HENRIQUE">LUCAS DA COSTA HENRIQUE</option>
+                  <option value="MARCELO VICENTE CAVALCANTE DA SILVA">MARCELO VICENTE CAVALCANTE DA SILVA</option>
+                  <option value="Mariana Pereira Santana">Mariana Pereira Santana</option>
+                  <option value="MARINETE PEREIRA DE SOUZA OLIVEIRA">MARINETE PEREIRA DE SOUZA OLIVEIRA</option>
+                  <option value="MIDIAN DE ALMEIDA PEREIRA">MIDIAN DE ALMEIDA PEREIRA</option>
+                  <option value="NÚBIA MIRANDA DA SILVA">NÚBIA MIRANDA DA SILVA</option>
+                  <option value="PAULA MARGARETE ALVES">PAULA MARGARETE ALVES</option>
+                  <option value="PRISCILA RIBEIRO DA SILVA">PRISCILA RIBEIRO DA SILVA</option>
+                  <option value="RAMILCA MORAIS DE ANDRADE">RAMILCA MORAIS DE ANDRADE</option>
+                  <option value="RENATO BENEDITO">RENATO BENEDITO</option>
+                  <option value="SANDRA REGINA SOARES CLEMENTE">SANDRA REGINA SOARES CLEMENTE</option>
+                  <option value="SIMONE BARONE YOSHIOKA SALERMO">SIMONE BARONE YOSHIOKA SALERMO</option>
+                  <option value="THAIS ALEKSEJUK BERNARDES">THAIS ALEKSEJUK BERNARDES</option>
+                  <option value="Valéria Santos França">Valéria Santos França</option>
+                  <option value="VERÔNICA DE FREITAS FIORI">VERÔNICA DE FREITAS FIORI</option>
+                </select>
+              </div>
+              <input id="a-prof-outros" name="professores_outros" type="text" class="outros-input" placeholder="Digite o nome do PEC" />
+            </div>
 
-      function update() {
-        if (select.value === 'Outros') {
-          outros.style.display = 'block';
-        } else {
-          outros.style.display = 'none';
-          outros.value = '';
-        }
+            <!-- DATA -->
+            <div class="col-4 field">
+              <label class="field-label" for="a-data">Data <span>*</span></label>
+              <input id="a-data" name="data" type="date" required />
+            </div>
+
+            <!-- ESCOLA -->
+            <div class="col-12 field">
+              <label class="field-label" for="a-escola">Escola <span>*</span></label>
+              <div class="select-wrap">
+                <select id="a-escola" name="escola" required>
+                  <option value="" disabled selected>Selecione a escola…</option>
+                  <option>ALFREDO ROBERTO</option>
+                  <option>ALICE ROMANOS PROFESSORA</option>
+                  <option>ANDERSON DA SILVA SOARES</option>
+                  <option>ANGELA SUELI PONTES DIAS PROFESSORA</option>
+                  <option>ANIS FADUL DOUTOR</option>
+                  <option>ANTONIO BRASILIO MENEZES DA FONSECA PROFESSOR</option>
+                  <option>ANTONIO GARCIA VEREADOR</option>
+                  <option>ANTONIO JOSE CAMPOS DE MENEZES PROFESSOR</option>
+                  <option>ANTONIO RODRIGUES DE ALMEIDA</option>
+                  <option>ANTONIO VALDEMAR GALO VEREADOR</option>
+                  <option>BATISTA RENZI</option>
+                  <option>BENEDITA DE CAMPOS MARCOLONGO PROFESSORA</option>
+                  <option>BRASILIO MACHADO NETO COMENDADOR</option>
+                  <option>CARLINDO REIS</option>
+                  <option>CARLOS MOLTENI PROFESSOR</option>
+                  <option>CHOJIRO SEGAWA</option>
+                  <option>CONJUNTO HABITACIONAL PARQUE DOURADO II</option>
+                  <option>DAVID JORGE CURI PROFESSOR</option>
+                  <option>EDIR DO COUTO ROSA PROFESSOR</option>
+                  <option>ELIANE APARECIDA DANTAS DA SILVA PROFESSORA</option>
+                  <option>EUCLIDES IGESCA</option>
+                  <option>GERALDO JUSTINIANO DE REZENDE SILVA PROFESSOR</option>
+                  <option>GILBERTO DE CARVALHO PROFESSOR</option>
+                  <option>GIOVANNI BATTISTA RAFFO PROFESSOR DOUTOR</option>
+                  <option>HELENA ZERRENNER</option>
+                  <option>IGNES CORREA ALLEN PROFESSORA</option>
+                  <option>IIJIMA</option>
+                  <option>JACQUES YVES COUSTEAU COMANDANTE</option>
+                  <option>JANDYRA COUTINHO PROFESSORA</option>
+                  <option>JARDIM SAO PAULO II</option>
+                  <option>JOSE BENEDITO LEITE BARTHOLOMEI PROFESSOR</option>
+                  <option>JOSE CAMILO DE ANDRADE</option>
+                  <option>JOSE EDUARDO VIEIRA RADUAN DOUTOR</option>
+                  <option>JOSE PAPAIZ PROFESSOR</option>
+                  <option>JOVIANO SATLER DE LIMA PROFESSOR</option>
+                  <option>JUSSARA FEITOSA DOMSCHKE PROFESSORA</option>
+                  <option>JUSTINO MARCONDES RANGEL PROFESSOR</option>
+                  <option>LANDIA SANTOS BATISTA PROFESSORA</option>
+                  <option>LEDA FERNANDES LOPES PROFESSORA</option>
+                  <option>LUCY FRANCO KOWALSKI PROFESSORA</option>
+                  <option>LUIZ BIANCONI</option>
+                  <option>LUIZA HIDAKA PROFESSORA</option>
+                  <option>MANUEL DOS SANTOS PAIVA</option>
+                  <option>MARIA ELISA DE AZEVEDO CINTRA PROFESSORA</option>
+                  <option>MARIO MANOEL DANTAS DE AQUINO PROFESSOR</option>
+                  <option>MARTHA CALIXTO CAZAGRANDE</option>
+                  <option>MASAITI SEKINE PROFESSOR</option>
+                  <option>MORATO DE OLIVEIRA DOUTOR</option>
+                  <option>OLAVO LEONEL FERREIRA PROFESSOR</option>
+                  <option>OLZANETTI GOMES PROFESSOR</option>
+                  <option>OSWALDO DE OLIVEIRA LIMA</option>
+                  <option>PAULO AMERICO PAGANUCCI PROFESSOR</option>
+                  <option>PAULO KOBAYASHI PROFESSOR</option>
+                  <option>RAUL BRASIL PROFESSOR</option>
+                  <option>ROBERTO BIANCHI</option>
+                  <option>SEBASTIAO PEREIRA VIDAL</option>
+                  <option>TACITO ZANCHETTA PREFEITO</option>
+                  <option>TOCHICHICO YOCHICAVA PROFESSOR</option>
+                  <option>TOKUZO TERAZAKI</option>
+                  <option>YOLANDA BASSI PROFESSORA</option>
+                  <option>ZEIKICHI FUKUOKA</option>
+                  <option>ZELIA GATTAI AMADO</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- COMPONENTE -->
+            <div class="col-12 field">
+              <label class="field-label" for="a-tema">Componente <span>*</span></label>
+              <input id="a-tema" name="tema" type="text" placeholder="Ex.: Tecnologias educativas; Apoio em sala" required />
+            </div>
+
+            <!-- OBS -->
+            <div class="col-12 field">
+              <label class="field-label" for="a-obs">Observações</label>
+              <textarea id="a-obs" name="obs" placeholder="Detalhes do apoio, responsáveis, encaminhamentos…"></textarea>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="divider"></div>
+        <div class="form-footer">
+          <div>
+            <div id="toast-apoio" class="toast toast-apoio">
+              ✓ Apoio registrado com sucesso!
+              <a href="./resultado-ecc.html?tab=apoio">Ver resultados →</a>
+            </div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:center;">
+            <button type="reset" class="btn-reset">Limpar</button>
+            <button type="submit" class="btn-submit btn-submit-apoio">
+              Registrar apoio <span class="arrow">→</span>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+</main>
+
+<script>
+  /* ── CONFIG SUPABASE (idêntica ao original) ── */
+  const SUPABASE_URL     = 'https://xdaanjevbvgqwasjqcew.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkYWFuamV2YnZncXdhc2pxY2V3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIwMDY4NDEsImV4cCI6MjA3NzU4Mjg0MX0.Pf-o3Wa9dLswwd4O8QFcH2v6oXHbvsSXrjIKJMUOz7E';
+
+  /* ── TABS ── */
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('panel-' + btn.dataset.tab).classList.add('active');
+    });
+  });
+
+  /* ── OUTROS DINÂMICOS ── */
+  function bindOutros(selectId, inputId) {
+    const sel = document.getElementById(selectId);
+    const inp = document.getElementById(inputId);
+    if (!sel || !inp) return;
+    sel.addEventListener('change', () => {
+      inp.classList.toggle('visible', sel.value === 'Outros');
+      if (sel.value !== 'Outros') inp.value = '';
+    });
+  }
+  bindOutros('v-tema-select', 'v-tema-outros');
+  bindOutros('v-prof-select', 'v-prof-outros');
+  bindOutros('a-prof-select', 'a-prof-outros');
+
+  /* ── ENVIO AO SUPABASE (lógica idêntica ao original) ── */
+  function deviceType() {
+    return /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) ? 'mobile' : 'desktop';
+  }
+
+  async function enviar(payload) {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/pec_submissions`, {
+      method: 'POST',
+      headers: {
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=representation'
+      },
+      body: JSON.stringify(payload)
+    });
+    const text = await res.text();
+    if (!res.ok) throw new Error(text || `HTTP ${res.status}`);
+    try { return JSON.parse(text); } catch { return text; }
+  }
+
+  function showToast(id) {
+    const el = document.getElementById(id);
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 5000);
+  }
+
+  function wireForm(formId, toastId, prefixo) {
+    document.getElementById(formId).addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fd = new FormData(e.target);
+
+      const temaSelect = (fd.get('tema_select') || '').trim();
+      const temaOutros = (fd.get('tema_outros') || '').trim();
+      const temaDireto = (fd.get('tema') || '').trim();
+
+      let temaFinal = '';
+      if (temaSelect || temaOutros) {
+        temaFinal = (temaSelect === 'Outros' && temaOutros) ? `Outros – ${temaOutros}` : (temaSelect || temaOutros);
+      } else {
+        temaFinal = temaDireto;
       }
 
-      select.addEventListener('change', update);
-      update();
-    }
+      const profSelect = (fd.get('professores_select') || '').trim();
+      const profOutros = (fd.get('professores_outros') || '').trim();
+      let pecFinal = (profSelect === 'Outros' && profOutros) ? profOutros : (profSelect || profOutros);
 
-    setupSelectOutros('v-tema-select', 'v-tema-outros');
-    // PECs
-    setupSelectOutros('v-prof-select', 'v-prof-outros');
-    setupSelectOutros('a-prof-select', 'a-prof-outros');
+      const payload = {
+        school_id:       null,
+        school_name:     (fd.get('escola') || '').trim(),
+        pec_name:        pecFinal,
+        supervisor_name: null,
+        role:            null,
+        visit_date:      (fd.get('data') || ''),
+        period:          null,
+        activity_type:   `${prefixo}: ${temaFinal}`,
+        notes:           (fd.get('obs') || '').trim() || null,
+        device:          deviceType(),
+        attachments:     []
+      };
 
-    async function enviar(payload) {
-      console.log('Payload enviado:', payload);
+      const btn = e.target.querySelector('[type="submit"]');
+      const original = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerHTML = 'Enviando…';
 
-      const res = await fetch(`${SUPABASE_URL}/rest/v1/pec_submissions`, {
-        method: 'POST',
-        headers: {
-          'apikey': SUPABASE_ANON_KEY,
-          'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
-          'Content-Type': 'application/json',
-          'Prefer': 'return=representation'
-        },
-        body: JSON.stringify(payload)
-      });
-
-      const text = await res.text();
-      if (!res.ok) {
-        console.error('STATUS:', res.status);
-        console.error('HEADERS:', Object.fromEntries(res.headers.entries()));
-        console.error('BODY:', text);
-        throw new Error(text || `HTTP ${res.status}`);
+      try {
+        await enviar(payload);
+        e.target.reset();
+        // limpa campos "outros" visíveis
+        e.target.querySelectorAll('.outros-input').forEach(i => { i.classList.remove('visible'); i.value = ''; });
+        showToast(toastId);
+      } catch (err) {
+        alert('Falha ao enviar: ' + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = original;
       }
-      try { return JSON.parse(text); } catch { return text; }
-    }
+    });
+  }
 
-    function wireForm(formId, okId, okLinkId, tabName, prefixo) {
-      const form = document.getElementById(formId);
-      const link = document.getElementById(okLinkId);
-
-      const resultsUrl = new URL('./resultado-ecc.html', window.location.href);
-      resultsUrl.searchParams.set('tab', tabName);
-      link.setAttribute('href', resultsUrl.pathname + resultsUrl.search);
-
-      form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const fd = new FormData(form);
-
-        const temaSelect = (fd.get('tema_select') || '').toString().trim();
-        const temaOutros = (fd.get('tema_outros') || '').toString().trim();
-        const temaDireto = (fd.get('tema') || '').toString().trim();
-
-        let temaFinal = '';
-        if (temaSelect || temaOutros) {
-          if (temaSelect === 'Outros' && temaOutros) {
-            temaFinal = `Outros – ${temaOutros}`;
-          } else {
-            temaFinal = temaSelect || temaOutros;
-          }
-        } else {
-          temaFinal = temaDireto;
-        }
-
-        const profSelect = (fd.get('professores_select') || '').toString().trim();
-        const profOutros = (fd.get('professores_outros') || '').toString().trim();
-        const profDireto = (fd.get('professores') || '').toString().trim();
-
-        let pecFinal = '';
-        if (profSelect || profOutros) {
-          if (profSelect === 'Outros' && profOutros) {
-            pecFinal = profOutros;
-          } else {
-            pecFinal = profSelect || profOutros;
-          }
-        } else {
-          pecFinal = profDireto;
-        }
-
-        const payload = {
-          school_id: null,
-          school_name: (fd.get('escola') || '').toString().trim(),
-          pec_name: pecFinal,
-          supervisor_name: null,
-          role: null,
-          visit_date: (fd.get('data') || '').toString(), // YYYY-MM-DD
-          period: null,
-          activity_type: `${prefixo}: ${temaFinal}`,
-          notes: (fd.get('obs') || '').toString().trim() || null,
-          device: deviceType(),
-          attachments: []
-        };
-
-        try {
-          await enviar(payload);
-          const ok = document.getElementById(okId);
-          ok.style.display = 'block';
-          link.focus();
-          form.reset();
-          setTimeout(() => {
-            ok.style.display = 'none';
-          }, 4000);
-        } catch (err) {
-          alert('Falha ao enviar: ' + err.message);
-        }
-      });
-    }
-
-    wireForm('form-visitas', 'ok-visitas', 'ok-link-visitas', 'visitas', 'Visita');
-    wireForm('form-apoio', 'ok-apoio', 'ok-link-apoio', 'apoio', 'Apoio presencial');
-  </script>
+  wireForm('form-visitas', 'toast-visita', 'Visita');
+  wireForm('form-apoio',   'toast-apoio',  'Apoio presencial');
+</script>
 </body>
-
 </html>
