@@ -1,653 +1,1229 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-br">
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Resultados – Visitas e Apoio Presencial (PECs)</title>
+    <title>PECs – Resultados de Visitas e Apoio Presencial</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
+      rel="stylesheet"
+    />
     <style>
-        :root {
-            --bg: #0f172a;
-            --card: #111827;
-            --muted: #94a3b8;
-            --text: #e5e7eb;
-            --accent: #22d3ee;
-            --danger: #ef4444;
-            --radius: 16px
+      :root {
+        --ink: #0a0a0f;
+        --paper: #f5f3ef;
+        --panel: #ffffff;
+        --muted: #6b7280;
+        --border: #e0ddd8;
+        --cyan: #00c2ff;
+        --green: #00e5a0;
+        --coral: #ff4f6a;
+        --amber: #ffb800;
+        --grad-v: linear-gradient(135deg, #00c2ff 0%, #00e5a0 100%);
+        --grad-a: linear-gradient(135deg, #ff4f6a 0%, #ffb800 100%);
+        --radius: 20px;
+        --shadow: 0 8px 40px rgba(0, 0, 0, 0.1);
+      }
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        font-family: "DM Sans", sans-serif;
+        background: var(--paper);
+        color: var(--ink);
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
+      .hero {
+        position: relative;
+        background: var(--ink);
+        padding: 48px 32px 72px;
+        overflow: hidden;
+      }
+      .hero::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          radial-gradient(
+            ellipse 60% 80% at 80% 50%,
+            rgba(0, 194, 255, 0.18) 0%,
+            transparent 70%
+          ),
+          radial-gradient(
+            ellipse 40% 60% at 10% 80%,
+            rgba(0, 229, 160, 0.12) 0%,
+            transparent 70%
+          );
+        pointer-events: none;
+      }
+      .hero-noise {
+        position: absolute;
+        inset: 0;
+        opacity: 0.03;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        background-size: 200px;
+      }
+      .hero-inner {
+        position: relative;
+        max-width: 1100px;
+        margin: 0 auto;
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 20px;
+      }
+      .hero-eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 999px;
+        padding: 6px 14px;
+        font-size: 0.75rem;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.7);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        margin-bottom: 16px;
+      }
+      .hero-eyebrow span {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--green);
+        animation: pulse 2s infinite;
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+          transform: scale(1);
         }
-
-        * {
-            box-sizing: border-box
+        50% {
+          opacity: 0.5;
+          transform: scale(1.4);
         }
-
-        html,
-        body {
-            margin: 0
+      }
+      .hero h1 {
+        font-family: "Syne", sans-serif;
+        font-size: clamp(1.8rem, 4vw, 2.8rem);
+        font-weight: 800;
+        color: #fff;
+        line-height: 1.1;
+        letter-spacing: -0.02em;
+        margin-bottom: 8px;
+      }
+      .hero h1 em {
+        font-style: normal;
+        background: var(--grad-v);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      .hero-sub {
+        color: rgba(255, 255, 255, 0.45);
+        font-size: 0.88rem;
+        font-weight: 300;
+      }
+      .hero-actions {
+        display: flex;
+        gap: 10px;
+        flex-shrink: 0;
+        flex-wrap: wrap;
+      }
+      .btn-ghost {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        text-decoration: none;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.82rem;
+        font-weight: 500;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 999px;
+        padding: 9px 18px;
+        transition: all 0.2s;
+        cursor: pointer;
+        background: transparent;
+        font-family: "DM Sans", sans-serif;
+      }
+      .btn-ghost:hover {
+        background: rgba(255, 255, 255, 0.08);
+        color: #fff;
+        border-color: rgba(255, 255, 255, 0.35);
+      }
+      .stats-row {
+        background: var(--ink);
+        border-top: 1px solid rgba(255, 255, 255, 0.06);
+        padding: 0 32px;
+      }
+      .stats-inner {
+        max-width: 1100px;
+        margin: 0 auto;
+        display: flex;
+      }
+      .stat-item {
+        flex: 1;
+        padding: 18px 20px;
+        border-right: 1px solid rgba(255, 255, 255, 0.06);
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        animation: fadeUp 0.4s ease both;
+      }
+      .stat-item:last-child {
+        border-right: 0;
+      }
+      .stat-label {
+        font-size: 0.7rem;
+        color: rgba(255, 255, 255, 0.4);
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+      }
+      .stat-value {
+        font-family: "Syne", sans-serif;
+        font-size: 1.6rem;
+        font-weight: 700;
+        color: #fff;
+        line-height: 1;
+      }
+      .stat-value.cyan {
+        background: var(--grad-v);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      .stat-value.coral {
+        background: var(--grad-a);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(12px);
         }
-
-        body {
-            font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans";
-            background: linear-gradient(135deg, #0b1025 0%, #0f172a 40%, #0b2530 100%);
-            color: var(--text);
-            min-height: 100vh;
-            padding: 24px
+        to {
+          opacity: 1;
+          transform: translateY(0);
         }
-
-        .container {
-            max-width: 1100px;
-            margin: 0 auto
+      }
+      .tab-band {
+        background: var(--ink);
+        padding: 0 32px;
+      }
+      .tab-band-inner {
+        max-width: 1100px;
+        margin: 0 auto;
+        display: flex;
+        gap: 4px;
+      }
+      .tab-btn {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 14px 20px;
+        border: 0;
+        background: transparent;
+        color: rgba(255, 255, 255, 0.4);
+        font-family: "DM Sans", sans-serif;
+        font-size: 0.88rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: color 0.2s;
+        border-bottom: 2px solid transparent;
+      }
+      .tab-btn .tab-icon {
+        width: 26px;
+        height: 26px;
+        border-radius: 7px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 13px;
+        background: rgba(255, 255, 255, 0.06);
+        transition: background 0.2s;
+      }
+      .tab-btn.active {
+        color: #fff;
+        border-bottom-color: var(--cyan);
+      }
+      .tab-btn.active .tab-icon {
+        background: linear-gradient(
+          135deg,
+          rgba(0, 194, 255, 0.3),
+          rgba(0, 229, 160, 0.3)
+        );
+      }
+      .tab-btn[data-tab="apoio"].active {
+        border-bottom-color: var(--coral);
+      }
+      .tab-btn[data-tab="apoio"].active .tab-icon {
+        background: linear-gradient(
+          135deg,
+          rgba(255, 79, 106, 0.3),
+          rgba(255, 184, 0, 0.3)
+        );
+      }
+      .main {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 32px 32px 80px;
+      }
+      .toolbar-card {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        padding: 16px 20px;
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+      .search-wrap {
+        position: relative;
+        flex: 1;
+        min-width: 200px;
+      }
+      .search-wrap input {
+        width: 100%;
+        background: #fafaf8;
+        border: 1.5px solid var(--border);
+        color: var(--ink);
+        padding: 10px 16px 10px 40px;
+        border-radius: 12px;
+        font-family: "DM Sans", sans-serif;
+        font-size: 0.88rem;
+        outline: none;
+        transition:
+          border-color 0.2s,
+          box-shadow 0.2s;
+      }
+      .search-wrap input:focus {
+        border-color: var(--cyan);
+        box-shadow: 0 0 0 3px rgba(0, 194, 255, 0.1);
+      }
+      .search-icon {
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--muted);
+        font-size: 14px;
+        pointer-events: none;
+      }
+      .filter-select {
+        background: #fafaf8;
+        border: 1.5px solid var(--border);
+        color: var(--ink);
+        padding: 10px 36px 10px 14px;
+        border-radius: 12px;
+        font-family: "DM Sans", sans-serif;
+        font-size: 0.82rem;
+        outline: none;
+        cursor: pointer;
+        appearance: none;
+        -webkit-appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236b7280' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 12px center;
+        transition: border-color 0.2s;
+      }
+      .filter-select:focus {
+        border-color: var(--cyan);
+        outline: none;
+      }
+      .counter-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 14px;
+        border-radius: 999px;
+        background: #fafaf8;
+        border: 1.5px solid var(--border);
+        font-size: 0.78rem;
+        font-weight: 500;
+        color: var(--muted);
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+      .counter-pill.filtered {
+        border-color: var(--cyan);
+        color: #0284c7;
+        background: rgba(0, 194, 255, 0.06);
+      }
+      .table-card {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        overflow: hidden;
+      }
+      .table-wrap {
+        overflow-x: auto;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      thead {
+        background: #fafaf8;
+        border-bottom: 1px solid var(--border);
+      }
+      thead th {
+        padding: 12px 16px;
+        font-size: 0.72rem;
+        font-weight: 600;
+        color: var(--muted);
+        text-align: left;
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        white-space: nowrap;
+      }
+      tbody tr {
+        border-bottom: 1px solid #f0ede8;
+        transition: background 0.15s;
+      }
+      tbody tr:last-child {
+        border-bottom: 0;
+      }
+      tbody tr:hover {
+        background: #fafaf8;
+      }
+      tbody td {
+        padding: 13px 16px;
+        font-size: 0.85rem;
+        vertical-align: top;
+      }
+      .date-pill {
+        display: inline-block;
+        background: var(--ink);
+        color: #fff;
+        font-size: 0.72rem;
+        font-weight: 600;
+        padding: 4px 10px;
+        border-radius: 8px;
+        font-family: "Syne", sans-serif;
+        letter-spacing: 0.02em;
+        white-space: nowrap;
+      }
+      .month-tag {
+        font-size: 0.78rem;
+        color: var(--muted);
+        margin-top: 3px;
+      }
+      .truncate {
+        max-width: 220px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .btn-edit,
+      .btn-del {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 6px 12px;
+        border-radius: 10px;
+        font-family: "DM Sans", sans-serif;
+        font-size: 0.75rem;
+        font-weight: 600;
+        cursor: pointer;
+        border: 0;
+        transition: all 0.15s;
+      }
+      .btn-edit {
+        background: #fafaf8;
+        color: var(--muted);
+        border: 1.5px solid var(--border);
+      }
+      .btn-edit:hover {
+        border-color: var(--cyan);
+        color: #0284c7;
+        background: rgba(0, 194, 255, 0.06);
+      }
+      .btn-del {
+        background: rgba(255, 79, 106, 0.08);
+        color: var(--coral);
+        border: 1.5px solid rgba(255, 79, 106, 0.2);
+      }
+      .btn-del:hover {
+        background: var(--coral);
+        color: #fff;
+        border-color: var(--coral);
+      }
+      .empty-row td {
+        text-align: center;
+        padding: 48px 16px;
+        color: var(--muted);
+        font-size: 0.88rem;
+      }
+      .loading-row td {
+        text-align: center;
+        padding: 40px 16px;
+        color: var(--muted);
+        font-size: 0.88rem;
+      }
+      .modal {
+        position: fixed;
+        inset: 0;
+        background: rgba(10, 10, 15, 0.6);
+        backdrop-filter: blur(4px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        z-index: 999;
+      }
+      .modal.open {
+        display: flex;
+      }
+      .modal-card {
+        width: 100%;
+        max-width: 520px;
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        box-shadow: 0 24px 80px rgba(0, 0, 0, 0.2);
+        animation: fadeUp 0.25s ease both;
+        overflow: hidden;
+      }
+      .modal-header {
+        padding: 20px 24px 16px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .modal-title {
+        font-family: "Syne", sans-serif;
+        font-size: 1.05rem;
+        font-weight: 700;
+      }
+      .modal-close {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        background: #fafaf8;
+        border: 1px solid var(--border);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        color: var(--muted);
+        transition: all 0.15s;
+      }
+      .modal-close:hover {
+        background: var(--ink);
+        color: #fff;
+        border-color: var(--ink);
+      }
+      .modal-body {
+        padding: 20px 24px;
+        display: grid;
+        gap: 14px;
+      }
+      .field {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
+      .field label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+      .field input,
+      .field textarea {
+        background: #fafaf8;
+        border: 1.5px solid var(--border);
+        color: var(--ink);
+        padding: 10px 14px;
+        border-radius: 12px;
+        font-family: "DM Sans", sans-serif;
+        font-size: 0.88rem;
+        outline: none;
+        transition:
+          border-color 0.2s,
+          box-shadow 0.2s;
+      }
+      .field input:focus,
+      .field textarea:focus {
+        border-color: var(--cyan);
+        box-shadow: 0 0 0 3px rgba(0, 194, 255, 0.1);
+      }
+      .field textarea {
+        min-height: 80px;
+        resize: vertical;
+      }
+      .modal-footer {
+        padding: 16px 24px;
+        border-top: 1px solid var(--border);
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        background: #fafaf8;
+      }
+      .btn-cancel {
+        padding: 10px 20px;
+        border-radius: 12px;
+        background: transparent;
+        border: 1.5px solid var(--border);
+        color: var(--muted);
+        font-family: "DM Sans", sans-serif;
+        font-size: 0.85rem;
+        cursor: pointer;
+        transition: all 0.15s;
+      }
+      .btn-cancel:hover {
+        border-color: #aaa;
+        color: var(--ink);
+      }
+      .btn-save {
+        padding: 10px 24px;
+        border-radius: 12px;
+        border: 0;
+        background: var(--grad-v);
+        color: var(--ink);
+        font-family: "Syne", sans-serif;
+        font-size: 0.88rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition:
+          transform 0.15s,
+          box-shadow 0.15s;
+      }
+      .btn-save:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 20px rgba(0, 194, 255, 0.3);
+      }
+      @media (max-width: 640px) {
+        .hero {
+          padding: 32px 20px 56px;
         }
-
-        header {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            margin-bottom: 12px
+        .stats-row,
+        .tab-band {
+          padding: 0 20px;
         }
-
-        h1 {
-            font-size: 1.35rem;
-            margin: 0
+        .main {
+          padding: 24px 20px 60px;
         }
-
-        .card {
-            background: linear-gradient(180deg, rgba(255, 255, 255, .04), rgba(0, 0, 0, .12));
-            border: 1px solid rgba(255, 255, 255, .08);
-            border-radius: var(--radius);
-            box-shadow: 0 6px 24px rgba(0, 0, 0, .35);
-            margin-bottom: 16px
+        .stats-inner {
+          flex-wrap: wrap;
         }
-
-        .toolbar {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            flex-wrap: wrap;
-            padding: 12px;
-            border-top: 1px solid rgba(255, 255, 255, .1)
+        .stat-item {
+          min-width: 50%;
+          border-right: 0;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.06);
         }
-
-        .toolbar .grow {
-            flex: 1
-        }
-
-        .toolbar input {
-            max-width: 340px;
-            background: #0b1226;
-            border: 1px solid rgba(255, 255, 255, .1);
-            color: var(--text);
-            padding: 10px;
-            border-radius: 12px
-        }
-
-        select {
-            background: #0b1226;
-            border: 1px solid rgba(255, 255, 255, .1);
-            color: var(--text);
-            padding: 10px;
-            border-radius: 12px
-        }
-
-        .pill {
-            padding: 4px 8px;
-            border-radius: 999px;
-            background: #0c1a34;
-            border: 1px solid rgba(255, 255, 255, .12);
-            font-size: .78rem
-        }
-
-        .table-wrap {
-            overflow: auto
-        }
-
-        table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0 8px;
-            padding: 12px
-        }
-
-        thead th {
-            font-size: .8rem;
-            color: var(--muted);
-            text-align: left;
-            font-weight: 600;
-            padding: 0 12px;
-            white-space: nowrap
-        }
-
-        tbody tr {
-            background: #0b1226;
-            border: 1px solid rgba(255, 255, 255, .06)
-        }
-
-        tbody td {
-            padding: 12px;
-            border-top: 1px solid rgba(255, 255, 255, .06);
-            border-bottom: 1px solid rgba(255, 255, 255, .06);
-            vertical-align: top
-        }
-
-        tbody td:first-child {
-            border-left: 1px solid rgba(255, 255, 255, .06);
-            border-top-left-radius: 12px;
-            border-bottom-left-radius: 12px
-        }
-
-        tbody td:last-child {
-            border-right: 1px solid rgba(255, 255, 255, .06);
-            border-top-right-radius: 12px;
-            border-bottom-right-radius: 12px
-        }
-
-        .actions {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-            flex-wrap: wrap
-        }
-
-        button,
-        .btn {
-            border: 0;
-            cursor: pointer;
-            border-radius: 12px;
-            padding: 10px 14px;
-            font-weight: 700
-        }
-
-        .btn {
-            display: inline-block;
-            text-decoration: none
-        }
-
-        .btn-secondary {
-            background: #0b1226;
-            color: var(--text);
-            border: 1px solid rgba(255, 255, 255, .15)
-        }
-
-        .btn-danger {
-            background: var(--danger);
-            color: #fff
-        }
-
-        .btn-small {
-            padding: 6px 10px;
-            font-weight: 600;
-            border-radius: 10px
-        }
-
-        .empty {
-            text-align: center;
-            color: var(--muted);
-            padding: 20px;
-            border-top: 1px dashed rgba(255, 255, 255, .18)
-        }
-
-        .modal {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, .6);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 16px;
-            z-index: 999
-        }
-
-        .modal.open {
-            display: flex
-        }
-
-        .modal-card {
-            width: 100%;
-            max-width: 540px;
-            background: linear-gradient(180deg, rgba(255, 255, 255, .06), rgba(0, 0, 0, .18));
-            border: 1px solid rgba(255, 255, 255, .12);
-            border-radius: 18px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, .5);
-            padding: 16px
-        }
-
-        .modal-card h2 {
-            margin: 0 0 8px;
-            font-size: 1.05rem
-        }
-
-        .modal-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 10px
-        }
-
-        .field {
-            display: grid;
-            gap: 6px
-        }
-
-        .field label {
-            font-size: .85rem;
-            color: var(--muted)
-        }
-
-        .field input,
-        .field textarea {
-            background: #0b1226;
-            border: 1px solid rgba(255, 255, 255, .15);
-            color: var(--text);
-            padding: 10px;
-            border-radius: 12px
-        }
-
-        .modal-actions {
-            display: flex;
-            gap: 10px;
-            justify-content: flex-end;
-            margin-top: 10px
-        }
+      }
     </style>
-</head>
-
-<body>
-    <div class="container">
-        <header>
-            <h1>Resultados – Visitas e Apoio Presencial (PECs)</h1>
-            <div class="actions">
-                <a class="btn btn-secondary" href="./Formulario-ecc.html">Cadastrar novo</a>
-                <button id="printPage" class="btn-secondary">Imprimir</button>
-                <button id="exportCsv" class="btn-secondary">Exportar CSV (aba ativa)</button>
-            </div>
-        </header>
-
-        <nav class="actions" style="margin-bottom:10px">
-            <button class="btn-secondary" data-tab="visitas" aria-pressed="true">Visitas</button>
-            <button class="btn-secondary" data-tab="apoio" aria-pressed="false">Apoio Presencial</button>
-        </nav>
-
-        <section id="sec-visitas" class="card">
-            <div class="toolbar">
-                <div class="grow">
-                    <input id="v-search" type="search" placeholder="Filtrar por professor, escola ou tema..."
-                        aria-label="Filtro de busca" />
-                </div>
-                <select id="v-filterMonth" aria-label="Filtrar por mês">
-                    <option value="">Todos os meses</option>
-                </select>
-                <select id="v-filterSchool" aria-label="Filtrar por escola">
-                    <option value="">Todas as escolas</option>
-                </select>
-                <span id="v-counter" class="pill">0 visitas</span>
-            </div>
-            <div class="table-wrap">
-                <table aria-describedby="v-counter">
-                    <thead>
-                        <tr>
-                            <th>Data</th>
-                            <th>Mês</th>
-                            <th>Professores PECs</th>
-                            <th>Escola</th>
-                            <th>Tema</th>
-                            <th>Observações</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody id="v-tbody"></tbody>
-                </table>
-                <div id="v-empty" class="empty">Nenhuma visita cadastrada.</div>
-            </div>
-        </section>
-
-        <section id="sec-apoio" class="card" style="display:none">
-            <div class="toolbar">
-                <div class="grow">
-                    <input id="a-search" type="search" placeholder="Filtrar por professor, escola ou tema..."
-                        aria-label="Filtro de busca" />
-                </div>
-                <select id="a-filterMonth" aria-label="Filtrar por mês">
-                    <option value="">Todos os meses</option>
-                </select>
-                <select id="a-filterSchool" aria-label="Filtrar por escola">
-                    <option value="">Todas as escolas</option>
-                </select>
-                <span id="a-counter" class="pill">0 apoios</span>
-            </div>
-            <div class="table-wrap">
-                <table aria-describedby="a-counter">
-                    <thead>
-                        <tr>
-                            <th>Data</th>
-                            <th>Mês</th>
-                            <th>Professores PECs</th>
-                            <th>Escola</th>
-                            <th>Tema</th>
-                            <th>Observações</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody id="a-tbody"></tbody>
-                </table>
-                <div id="a-empty" class="empty">Nenhum apoio presencial cadastrado.</div>
-            </div>
-        </section>
+  </head>
+  <body>
+    <div class="hero">
+      <div class="hero-noise"></div>
+      <div class="hero-inner">
+        <div>
+          <div class="hero-eyebrow">
+            <span></span> Diretoria de Ensino – Região de Suzano
+          </div>
+          <h1>Resultados<br /><em>Visitas & Apoio</em></h1>
+          <p class="hero-sub">
+            Histórico completo das ações dos Professores Coordenadores de
+            Escola.
+          </p>
+        </div>
+        <div class="hero-actions">
+          <a class="btn-ghost" href="./Formulario-ecc.html">+ Cadastrar</a>
+          <button class="btn-ghost" id="btnExportCsv">⬇ CSV</button>
+          <button class="btn-ghost" id="btnPrint">🖨 Imprimir</button>
+        </div>
+      </div>
     </div>
 
-    
-    <div id="editModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="editTitle">
-        <div class="modal-card">
-            <h2 id="editTitle">Editar registro</h2>
-            <div class="modal-grid">
-                <div class="field"><label for="fData">Data</label><input id="fData" type="date" /></div>
-                <div class="field"><label for="fProf">Professores PECs</label><input id="fProf" type="text" /></div>
-                <div class="field"><label for="fEscola">Escola</label><input id="fEscola" type="text" /></div>
-                <div class="field"><label for="fTema">Tema</label><input id="fTema" type="text" /></div>
-                <div class="field"><label for="fObs">Observações</label><textarea id="fObs" rows="4"></textarea></div>
-            </div>
-            <div class="modal-actions">
-                <button id="btnCancel" class="btn-secondary">Cancelar</button>
-                <button id="btnSave" class="btn-secondary">Salvar</button>
-            </div>
+    <div class="stats-row">
+      <div class="stats-inner">
+        <div class="stat-item" style="animation-delay: 0.05s">
+          <div class="stat-label">Total de registros</div>
+          <div class="stat-value" id="stat-total">—</div>
         </div>
+        <div class="stat-item" style="animation-delay: 0.1s">
+          <div class="stat-label">Visitas</div>
+          <div class="stat-value cyan" id="stat-visitas">—</div>
+        </div>
+        <div class="stat-item" style="animation-delay: 0.15s">
+          <div class="stat-label">Apoios presenciais</div>
+          <div class="stat-value coral" id="stat-apoios">—</div>
+        </div>
+        <div class="stat-item" style="animation-delay: 0.2s">
+          <div class="stat-label">Escolas atendidas</div>
+          <div class="stat-value" id="stat-escolas">—</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-band">
+      <div class="tab-band-inner">
+        <button class="tab-btn active" data-tab="visitas">
+          <span class="tab-icon">🏫</span> Visitas
+        </button>
+        <button class="tab-btn" data-tab="apoio">
+          <span class="tab-icon">🤝</span> Apoio Presencial
+        </button>
+      </div>
+    </div>
+
+    <main class="main">
+      <div id="sec-visitas">
+        <div class="toolbar-card">
+          <div class="search-wrap">
+            <span class="search-icon">🔍</span
+            ><input
+              id="v-search"
+              type="search"
+              placeholder="Filtrar por professor, escola ou tema…"
+            />
+          </div>
+          <select class="filter-select" id="v-filterMonth">
+            <option value="">Todos os meses</option>
+          </select>
+          <select class="filter-select" id="v-filterSchool">
+            <option value="">Todas as escolas</option>
+          </select>
+          <span class="counter-pill" id="v-counter">carregando…</span>
+        </div>
+        <div class="table-card">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Data</th>
+                  <th>Professor PEC</th>
+                  <th>Escola</th>
+                  <th>Tema</th>
+                  <th>Observações</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="v-tbody">
+                <tr class="loading-row">
+                  <td colspan="6">⏳ Carregando registros…</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div id="sec-apoio" style="display: none">
+        <div class="toolbar-card">
+          <div class="search-wrap">
+            <span class="search-icon">🔍</span
+            ><input
+              id="a-search"
+              type="search"
+              placeholder="Filtrar por professor, escola ou componente…"
+            />
+          </div>
+          <select class="filter-select" id="a-filterMonth">
+            <option value="">Todos os meses</option>
+          </select>
+          <select class="filter-select" id="a-filterSchool">
+            <option value="">Todas as escolas</option>
+          </select>
+          <span class="counter-pill" id="a-counter">carregando…</span>
+        </div>
+        <div class="table-card">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Data</th>
+                  <th>Professor PEC</th>
+                  <th>Escola</th>
+                  <th>Componente</th>
+                  <th>Observações</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="a-tbody">
+                <tr class="loading-row">
+                  <td colspan="6">⏳ Carregando registros…</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div id="editModal" class="modal" role="dialog" aria-modal="true">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div class="modal-title">Editar registro</div>
+          <button class="modal-close" id="btnModalClose">✕</button>
+        </div>
+        <div class="modal-body">
+          <div class="field">
+            <label for="fData">Data</label><input id="fData" type="date" />
+          </div>
+          <div class="field">
+            <label for="fProf">Professor PEC</label
+            ><input id="fProf" type="text" />
+          </div>
+          <div class="field">
+            <label for="fEscola">Escola</label
+            ><input id="fEscola" type="text" />
+          </div>
+          <div class="field">
+            <label for="fTema">Tema / Componente</label
+            ><input id="fTema" type="text" />
+          </div>
+          <div class="field">
+            <label for="fObs">Observações</label
+            ><textarea id="fObs" rows="3"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-cancel" id="btnCancel">Cancelar</button>
+          <button class="btn-save" id="btnSave">Salvar alterações</button>
+        </div>
+      </div>
     </div>
 
     <script>
-        
-        const SUPABASE_URL = 'https://xdaanjevbvgqwasjqcew.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkYWFuamV2YnZncXdhc2pxY2V3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIwMDY4NDEsImV4cCI6MjA3NzU4Mjg0MX0.Pf-o3Wa9dLswwd4O8QFcH2v6oXHbvsSXrjIKJMUOz7E';
-
-        const sbHeaders = {
-            'apikey': SUPABASE_ANON_KEY,
-            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-            'Content-Type': 'application/json'
-        };
-
-        async function sbDelete(id) {
-            const url = `${SUPABASE_URL}/rest/v1/pec_submissions?id=eq.${encodeURIComponent(id)}`;
-            const res = await fetch(url, { method: 'DELETE', headers: sbHeaders });
-            if (!res.ok) throw new Error(`DELETE falhou: HTTP ${res.status}`);
+      const SUPABASE_URL = "https://xdaanjevbvgqwasjqcew.supabase.co";
+      const SUPABASE_ANON_KEY =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkYWFuamV2YnZncXdhc2pxY2V3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIwMDY4NDEsImV4cCI6MjA3NzU4Mjg0MX0.Pf-o3Wa9dLswwd4O8QFcH2v6oXHbvsSXrjIKJMUOz7E";
+      const sbHeaders = {
+        apikey: SUPABASE_ANON_KEY,
+        Authorization: "Bearer " + SUPABASE_ANON_KEY,
+        "Content-Type": "application/json",
+      };
+      const K_VISITAS = "visitas-pecs-v2",
+        K_APOIO = "apoio-presencial-v1";
+      const PT_BR_MESES = [
+        "Jan",
+        "Fev",
+        "Mar",
+        "Abr",
+        "Mai",
+        "Jun",
+        "Jul",
+        "Ago",
+        "Set",
+        "Out",
+        "Nov",
+        "Dez",
+      ];
+      const save = (k, d) => localStorage.setItem(k, JSON.stringify(d));
+      const load = (k, f) => {
+        try {
+          return JSON.parse(localStorage.getItem(k)) ?? f;
+        } catch {
+          return f;
         }
+      };
+      const fmtDate = (iso) => {
+        if (!iso) return "";
+        const d = new Date(iso + "T00:00:00");
+        return (
+          String(d.getDate()).padStart(2, "0") +
+          "/" +
+          String(d.getMonth() + 1).padStart(2, "0") +
+          "/" +
+          d.getFullYear()
+        );
+      };
+      const fmtMonth = (iso) => {
+        if (!iso) return "";
+        return PT_BR_MESES[new Date(iso + "T00:00:00").getMonth()];
+      };
 
-        async function sbUpdate(id, payload) {
-            const url = `${SUPABASE_URL}/rest/v1/pec_submissions?id=eq.${encodeURIComponent(id)}`;
-            const res = await fetch(url, {
-                method: 'PATCH',
-                headers: { ...sbHeaders, 'Prefer': 'return=representation' },
-                body: JSON.stringify(payload)
-            });
-            const txt = await res.text();
-            let json = null; try { json = txt ? JSON.parse(txt) : null } catch { }
-            if (!res.ok) throw new Error(json?.message || txt || `PATCH falhou: HTTP ${res.status}`);
-            return json?.[0] || null;
+      async function sbDelete(id) {
+        const res = await fetch(
+          `${SUPABASE_URL}/rest/v1/pec_submissions?id=eq.${encodeURIComponent(id)}`,
+          { method: "DELETE", headers: sbHeaders },
+        );
+        if (!res.ok) throw new Error(`DELETE falhou: HTTP ${res.status}`);
+      }
+      async function sbUpdate(id, payload) {
+        const res = await fetch(
+          `${SUPABASE_URL}/rest/v1/pec_submissions?id=eq.${encodeURIComponent(id)}`,
+          {
+            method: "PATCH",
+            headers: { ...sbHeaders, Prefer: "return=representation" },
+            body: JSON.stringify(payload),
+          },
+        );
+        const txt = await res.text();
+        let json = null;
+        try {
+          json = txt ? JSON.parse(txt) : null;
+        } catch {}
+        if (!res.ok)
+          throw new Error(
+            json?.message || txt || `PATCH falhou: HTTP ${res.status}`,
+          );
+        return json?.[0] || null;
+      }
+
+      async function syncFromSupabase() {
+        const PAGE_SIZE = 1000;
+        let all = [],
+          offset = 0;
+        while (true) {
+          const url = `${SUPABASE_URL}/rest/v1/pec_submissions?select=id,school_name,pec_name,visit_date,activity_type,notes,created_at&order=created_at.desc&limit=${PAGE_SIZE}&offset=${offset}`;
+          const res = await fetch(url, { headers: sbHeaders });
+          if (!res.ok) throw new Error(`SELECT falhou: HTTP ${res.status}`);
+          const page = await res.json();
+          all = all.concat(page);
+          if (page.length < PAGE_SIZE) break;
+          offset += PAGE_SIZE;
         }
-
-       
-        const $ = (s, scope = document) => scope.querySelector(s);
-        const $$ = (s, scope = document) => Array.from(scope.querySelectorAll(s));
-        const save = (k, d) => localStorage.setItem(k, JSON.stringify(d));
-        const load = (k, f) => { try { return JSON.parse(localStorage.getItem(k)) ?? f } catch { return f } };
-        const PT_BR_MESES = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
-        const fmt = {
-            date(iso) { if (!iso) return ""; const d = new Date(iso + 'T00:00:00'); return String(d.getDate()).padStart(2, '0') + '/' + String(d.getMonth() + 1).padStart(2, '0') + '/' + d.getFullYear(); },
-            month(iso) { if (!iso) return ""; return PT_BR_MESES[new Date(iso + 'T00:00:00').getMonth()] }
-        };
-
-        const K_VISITAS = 'visitas-pecs-v2';
-        const K_APOIO = 'apoio-presencial-v1';
-
-      
-        async function syncFromSupabase() {
-            const url = `${SUPABASE_URL}/rest/v1/pec_submissions?select=id,school_name,pec_name,visit_date,activity_type,notes&order=created_at.desc`;
-            const res = await fetch(url, { headers: sbHeaders });
-            if (!res.ok) throw new Error(`SELECT falhou: HTTP ${res.status}`);
-            const data = await res.json();
-
-            const visitas = [];
-            const apoios = [];
-
-            for (const row of data) {
-                const at = (row.activity_type || '').trim();
-                const isVisita = at.toLowerCase().startsWith('visita');
-                const isApoio = at.toLowerCase().startsWith('apoio presencial');
-
-               
-                let tema = at;
-                const p = at.indexOf(':');
-                if (p >= 0) tema = at.slice(p + 1).trim();
-
-                const item = {
-                    id: crypto?.randomUUID?.() || `id-${Math.random().toString(16).slice(2)}`,
-                    db_id: row.id,                         // <- id do banco (para editar/excluir)
-                    kind: isVisita ? 'visita' : (isApoio ? 'apoio' : 'visita'),
-                    data: row.visit_date || '',
-                    professores: row.pec_name || '',
-                    escola: row.school_name || '',
-                    tema: tema || '',
-                    obs: row.notes || ''
-                };
-
-                if (item.kind === 'visita') visitas.push(item);
-                else apoios.push(item);
-            }
-
-            save(K_VISITAS, { items: visitas });
-            save(K_APOIO, { items: apoios });
+        const visitas = [],
+          apoios = [];
+        for (const row of all) {
+          const at = (row.activity_type || "").trim();
+          const isV = at.toLowerCase().startsWith("visita");
+          const isA = at.toLowerCase().startsWith("apoio presencial");
+          let tema = at;
+          const p = at.indexOf(":");
+          if (p >= 0) tema = at.slice(p + 1).trim();
+          const item = {
+            id:
+              crypto?.randomUUID?.() ||
+              `id-${Math.random().toString(16).slice(2)}`,
+            db_id: row.id,
+            kind: isV ? "visita" : isA ? "apoio" : "visita",
+            data: row.visit_date || "",
+            professores: row.pec_name || "",
+            escola: row.school_name || "",
+            tema: tema || "",
+            obs: row.notes || "",
+          };
+          if (item.kind === "visita") visitas.push(item);
+          else apoios.push(item);
         }
+        save(K_VISITAS, { items: visitas });
+        save(K_APOIO, { items: apoios });
+        return { totalVisitas: visitas.length, totalApoios: apoios.length };
+      }
 
-        const tabBtns = $$('nav [data-tab]');
-        const secVis = $('#sec-visitas');
-        const secApo = $('#sec-apoio');
-        tabBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                tabBtns.forEach(b => b.setAttribute('aria-pressed', 'false'));
-                btn.setAttribute('aria-pressed', 'true');
-                const vis = btn.getAttribute('data-tab') === 'visitas';
-                secVis.style.display = vis ? '' : 'none';
-                secApo.style.display = vis ? 'none' : '';
-            });
+      let TOTAL_VISITAS = 0,
+        TOTAL_APOIOS = 0;
+      function updateStats() {
+        const sv = load(K_VISITAS, { items: [] });
+        const sa = load(K_APOIO, { items: [] });
+        const escolas = new Set(
+          [...sv.items, ...sa.items].map((i) => i.escola).filter(Boolean),
+        ).size;
+        document.getElementById("stat-total").textContent =
+          TOTAL_VISITAS + TOTAL_APOIOS;
+        document.getElementById("stat-visitas").textContent = TOTAL_VISITAS;
+        document.getElementById("stat-apoios").textContent = TOTAL_APOIOS;
+        document.getElementById("stat-escolas").textContent = escolas;
+      }
+
+      document.querySelectorAll(".tab-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          document
+            .querySelectorAll(".tab-btn")
+            .forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+          const vis = btn.dataset.tab === "visitas";
+          document.getElementById("sec-visitas").style.display = vis
+            ? ""
+            : "none";
+          document.getElementById("sec-apoio").style.display = vis
+            ? "none"
+            : "";
         });
+      });
 
-        
-        const modal = $('#editModal');
-        const fData = $('#fData'), fProf = $('#fProf'), fEscola = $('#fEscola'), fTema = $('#fTema'), fObs = $('#fObs');
-        const btnCancel = $('#btnCancel'), btnSave = $('#btnSave');
-        let modalCtx = null; 
-
-        function openEdit(storageKey, index) {
-            const state = load(storageKey, { items: [] });
-            const it = state.items[index] || {};
-            fData.value = it.data || '';
-            fProf.value = it.professores || '';
-            fEscola.value = it.escola || '';
-            fTema.value = it.tema || '';
-            fObs.value = it.obs || '';
-            modalCtx = { storageKey, index, original: it };
-            modal.classList.add('open');
+      const modal = document.getElementById("editModal"),
+        fData = document.getElementById("fData"),
+        fProf = document.getElementById("fProf"),
+        fEscola = document.getElementById("fEscola"),
+        fTema = document.getElementById("fTema"),
+        fObs = document.getElementById("fObs");
+      let modalCtx = null;
+      function openEdit(sk, idx) {
+        const st = load(sk, { items: [] });
+        const it = st.items[idx] || {};
+        fData.value = it.data || "";
+        fProf.value = it.professores || "";
+        fEscola.value = it.escola || "";
+        fTema.value = it.tema || "";
+        fObs.value = it.obs || "";
+        modalCtx = { storageKey: sk, index: idx };
+        modal.classList.add("open");
+      }
+      function closeEdit() {
+        modal.classList.remove("open");
+        modalCtx = null;
+      }
+      document
+        .getElementById("btnModalClose")
+        .addEventListener("click", closeEdit);
+      document.getElementById("btnCancel").addEventListener("click", closeEdit);
+      modal.addEventListener("click", (e) => {
+        if (e.target === modal) closeEdit();
+      });
+      document.getElementById("btnSave").addEventListener("click", async () => {
+        if (!modalCtx) return;
+        const { storageKey, index } = modalCtx;
+        const state = load(storageKey, { items: [] });
+        const dval = (fData.value || "").trim();
+        if (dval && !/^\d{4}-\d{2}-\d{2}$/.test(dval)) {
+          alert("Data inválida.");
+          return;
         }
-        function closeEdit() { modal.classList.remove('open'); modalCtx = null; }
-        btnCancel.addEventListener('click', closeEdit);
-        modal.addEventListener('click', e => { if (e.target === modal) closeEdit(); });
+        const updated = {
+          ...(state.items[index] || {}),
+          data: dval,
+          professores: fProf.value,
+          escola: fEscola.value,
+          tema: fTema.value,
+          obs: fObs.value,
+        };
+        try {
+          if (updated.db_id) {
+            const kind =
+              storageKey === K_VISITAS ? "Visita" : "Apoio presencial";
+            await sbUpdate(updated.db_id, {
+              visit_date: updated.data || null,
+              school_name: updated.escola || null,
+              pec_name: updated.professores || null,
+              notes: updated.obs || null,
+              activity_type: `${kind}: ${updated.tema || ""}`.trim(),
+            });
+          }
+        } catch (err) {
+          alert("Falha ao salvar: " + err.message);
+          return;
+        }
+        state.items[index] = updated;
+        save(storageKey, state);
+        modVis.render();
+        modApo.render();
+        closeEdit();
+      });
 
-        btnSave.addEventListener('click', async () => {
-            if (!modalCtx) return;
-            const { storageKey, index, original } = modalCtx;
+      function escHtml(s) {
+        return String(s)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+      }
+      function createModule(prefix, storageKey, labelPlural, totalGetter) {
+        const els = {
+          search: document.getElementById(prefix + "-search"),
+          filterMonth: document.getElementById(prefix + "-filterMonth"),
+          filterSchool: document.getElementById(prefix + "-filterSchool"),
+          counter: document.getElementById(prefix + "-counter"),
+          tbody: document.getElementById(prefix + "-tbody"),
+        };
+        function getState() {
+          return load(storageKey, { items: [] });
+        }
+        function initFilters(state) {
+          if (!els.filterMonth.dataset.ready) {
+            PT_BR_MESES.forEach((m, i) => {
+              const o = document.createElement("option");
+              o.value = String(i + 1).padStart(2, "0");
+              o.textContent = m;
+              els.filterMonth.appendChild(o);
+            });
+            els.filterMonth.dataset.ready = "1";
+          }
+          const sel = els.filterSchool.value;
+          els.filterSchool.innerHTML =
+            '<option value="">Todas as escolas</option>';
+          [
+            ...new Set(
+              state.items.map((x) => (x.escola || "").trim()).filter(Boolean),
+            ),
+          ]
+            .sort((a, b) => a.localeCompare(b))
+            .forEach((es) => {
+              const o = document.createElement("option");
+              o.value = es;
+              o.textContent = es;
+              els.filterSchool.appendChild(o);
+            });
+          if (sel) els.filterSchool.value = sel;
+        }
+        function render() {
+          const state = getState();
+          initFilters(state);
+          const q = (els.search.value || "").trim().toLowerCase();
+          const mm = els.filterMonth.value;
+          const es = (els.filterSchool.value || "").trim();
+          const hayFiltro = q || mm || es;
+          const rows = state.items
+            .map((it, idx) => ({ it, idx }))
+            .filter(({ it }) => {
+              const ok =
+                !q ||
+                [it.professores, it.escola, it.tema, it.obs]
+                  .join(" ")
+                  .toLowerCase()
+                  .includes(q);
+              const mo = !mm || (it.data && it.data.split("-")[1] === mm);
+              const sc = !es || it.escola === es;
+              return ok && mo && sc;
+            })
+            .sort((a, b) => (b.it.data || "").localeCompare(a.it.data || ""));
+          els.tbody.innerHTML = "";
+          if (!rows.length) {
+            els.tbody.innerHTML =
+              '<tr class="empty-row"><td colspan="6">Nenhum registro encontrado.</td></tr>';
+          } else {
+            rows.forEach(({ it, idx }) => {
+              const tr = document.createElement("tr");
+              tr.innerHTML = `<td><div class="date-pill">${fmtDate(it.data)}</div><div class="month-tag">${fmtMonth(it.data)}</div></td><td class="truncate">${escHtml(it.professores || "—")}</td><td class="truncate">${escHtml(it.escola || "—")}</td><td class="truncate">${escHtml(it.tema || "—")}</td><td class="truncate">${escHtml(it.obs || "")}</td><td><div style="display:flex;gap:6px;white-space:nowrap"><button class="btn-edit" data-cmd="edit" data-index="${idx}">✏ Editar</button><button class="btn-del" data-cmd="del" data-index="${idx}">✕</button></div></td>`;
+              els.tbody.appendChild(tr);
+            });
+          }
+          const total = totalGetter();
+          if (hayFiltro) {
+            els.counter.textContent = `${rows.length} de ${total} ${labelPlural}`;
+            els.counter.classList.add("filtered");
+          } else {
+            els.counter.textContent = `${total} ${labelPlural}`;
+            els.counter.classList.remove("filtered");
+          }
+        }
+        els.search.addEventListener("input", render);
+        els.filterMonth.addEventListener("change", render);
+        els.filterSchool.addEventListener("change", render);
+        els.tbody.addEventListener("click", async (ev) => {
+          const btn = ev.target.closest("[data-cmd]");
+          if (!btn) return;
+          const idx = Number(btn.dataset.index);
+          const cmd = btn.dataset.cmd;
+          if (cmd === "edit") {
+            openEdit(storageKey, idx);
+            return;
+          }
+          if (cmd === "del") {
             const state = load(storageKey, { items: [] });
-
-            const dval = (fData.value || '').trim();
-            if (dval && !/^\d{4}-\d{2}-\d{2}$/.test(dval)) { alert('Data inválida. Use YYYY-MM-DD.'); return; }
-
-            // Atualiza local
-            const updated = {
-                ...(state.items[index] || {}),
-                data: dval || '',
-                professores: fProf.value || '',
-                escola: fEscola.value || '',
-                tema: fTema.value || '',
-                obs: fObs.value || ''
-            };
-
+            const reg = state.items[idx];
+            if (
+              !confirm(
+                `Excluir o registro de "${reg?.professores || "—"}" (${reg?.escola || "—"})?`,
+              )
+            )
+              return;
             try {
-                if (updated.db_id) {
-                    const kind = storageKey === K_VISITAS ? 'Visita' : 'Apoio presencial';
-                    await sbUpdate(updated.db_id, {
-                        visit_date: updated.data || null,
-                        school_name: updated.escola || null,
-                        pec_name: updated.professores || null,
-                        notes: updated.obs || null,
-                        activity_type: `${kind}: ${updated.tema || ''}`.trim()
-                    });
-                }
+              if (reg.db_id) await sbDelete(reg.db_id);
             } catch (err) {
-                alert('Falha ao salvar no banco: ' + err.message);
-                return;
+              alert("Falha ao excluir: " + err.message);
+              return;
             }
-
-            state.items[index] = updated;
+            if (storageKey === K_VISITAS)
+              TOTAL_VISITAS = Math.max(0, TOTAL_VISITAS - 1);
+            else TOTAL_APOIOS = Math.max(0, TOTAL_APOIOS - 1);
+            state.items.splice(idx, 1);
             save(storageKey, state);
-            modVis.render(); modApo.render();
-            closeEdit();
+            updateStats();
+            modVis.render();
+            modApo.render();
+          }
         });
+        return { render };
+      }
 
-        
-        function createReadModule(prefix, storageKey, labelPlural) {
-            const els = {
-                search: document.getElementById(prefix[0] + '-search'),
-                filterMonth: document.getElementById(prefix[0] + '-filterMonth'),
-                filterSchool: document.getElementById(prefix[0] + '-filterSchool'),
-                counter: document.getElementById(prefix[0] + '-counter'),
-                tbody: document.getElementById(prefix[0] + '-tbody'),
-                empty: document.getElementById(prefix[0] + '-empty')
-            };
-            function getState() { return load(storageKey, { items: [] }); }
-
-            function refreshSchoolFilter(state) {
-                const selected = els.filterSchool.value;
-                els.filterSchool.innerHTML = '<option value="">Todas as escolas</option>';
-                const escolas = [...new Set(state.items.map(x => (x.escola || '').trim()).filter(Boolean))].sort((a, b) => a.localeCompare(b));
-                escolas.forEach(es => {
-                    const opt = document.createElement('option'); opt.value = es; opt.textContent = es; els.filterSchool.appendChild(opt);
-                });
-                if (selected) els.filterSchool.value = selected;
-            }
-            function initFilters(state) {
-                if (!els.filterMonth.dataset.ready) {
-                    PT_BR_MESES.forEach((m, i) => {
-                        const opt = document.createElement('option'); opt.value = String(i + 1).padStart(2, '0'); opt.textContent = m; els.filterMonth.appendChild(opt);
-                    });
-                    els.filterMonth.dataset.ready = '1';
-                }
-                refreshSchoolFilter(state);
-            }
-            function escapeHtml(str) { return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\"/g, '&quot;').replace(/'/g, '&#039;'); }
-
-            function render() {
-                const state = getState(); initFilters(state);
-                const q = (els.search.value || '').trim().toLowerCase();
-                const mm = els.filterMonth.value;
-                const es = (els.filterSchool.value || '').trim();
-
-                const rows = state.items
-                    .map((it, idx) => ({ it, idx }))
-                    .filter(({ it }) => {
-                        const matches = !q || [it.professores, it.escola, it.tema, it.obs].join(' ').toLowerCase().includes(q);
-                        const monthOk = !mm || (it.data && it.data.split('-')[1] === mm);
-                        const schoolOk = !es || it.escola === es;
-                        return matches && monthOk && schoolOk;
-                    })
-                    .sort((a, b) => (a.it.data || '').localeCompare(b.it.data || ''));
-
-                els.tbody.innerHTML = '';
-                rows.forEach(({ it, idx }) => {
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
-            <td><span class="pill">${fmt.date(it.data)}</span></td>
-            <td>${fmt.month(it.data)}</td>
-            <td>${escapeHtml(it.professores || '')}</td>
-            <td>${escapeHtml(it.escola || '')}</td>
-            <td>${escapeHtml(it.tema || '')}</td>
-            <td>${escapeHtml(it.obs || '')}</td>
-            <td>
-              <div class="actions">
-                <button class="btn-small btn-secondary" data-cmd="edit" data-index="${idx}">Editar</button>
-                <button class="btn-small btn-danger" data-cmd="del" data-index="${idx}">Excluir</button>
-              </div>
-            </td>`;
-                    els.tbody.appendChild(tr);
-                });
-
-                els.empty.style.display = rows.length ? 'none' : 'block';
-                els.counter.textContent = `${rows.length} ${labelPlural}`;
-                refreshSchoolFilter(state);
-            }
-
-            els.search.addEventListener('input', render);
-            els.filterMonth.addEventListener('change', render);
-            els.filterSchool.addEventListener('change', render);
-
-          
-            els.tbody.addEventListener('click', async (ev) => {
-                const btn = ev.target.closest('[data-cmd]'); if (!btn) return;
-                const idx = Number(btn.getAttribute('data-index'));
-                const cmd = btn.getAttribute('data-cmd');
-
-                if (cmd === 'edit') { openEdit(storageKey, idx); return; }
-
-                if (cmd === 'del') {
-                    const state = load(storageKey, { items: [] });
-                    const reg = state.items[idx];
-                    const txt = reg ? `Confirma excluir o registro de "${reg.professores || '—'}" (${reg.escola || '—'})?` : 'Confirma excluir este registro?';
-                    if (!confirm(txt)) return;
-
-                    try {
-                        if (reg.db_id) await sbDelete(reg.db_id); // apaga no banco
-                    } catch (err) {
-                        alert('Falha ao excluir no banco: ' + err.message);
-                        return;
-                    }
-
-                    
-                    state.items.splice(idx, 1);
-                    save(storageKey, state);
-                    modVis.render(); modApo.render();
-                }
-            });
-
-            return { render };
+      let modVis, modApo;
+      (async () => {
+        try {
+          const t = await syncFromSupabase();
+          TOTAL_VISITAS = t.totalVisitas;
+          TOTAL_APOIOS = t.totalApoios;
+        } catch (e) {
+          console.error("Sync falhou:", e);
+          TOTAL_VISITAS = load(K_VISITAS, { items: [] }).items.length;
+          TOTAL_APOIOS = load(K_APOIO, { items: [] }).items.length;
         }
+        updateStats();
+        modVis = createModule("v", K_VISITAS, "visitas", () => TOTAL_VISITAS);
+        modApo = createModule("a", K_APOIO, "apoios", () => TOTAL_APOIOS);
+        modVis.render();
+        modApo.render();
+        const params = new URLSearchParams(window.location.search);
+        if (params.get("tab") === "apoio")
+          document.querySelector('[data-tab="apoio"]').click();
+      })();
 
-       
-        let modVis, modApo;
-        (async function init() {
-            try { await syncFromSupabase(); } catch (e) { console.error('Erro ao sincronizar do Supabase:', e); }
-            modVis = createReadModule('visitas', K_VISITAS, 'visitas');
-            modApo = createReadModule('apoio', K_APOIO, 'apoios');
-            modVis.render(); modApo.render();
-        })();
-
-        
-        document.getElementById('exportCsv').addEventListener('click', () => {
-            const visActive = $('#sec-visitas').style.display !== 'none';
-            const storageKey = visActive ? K_VISITAS : K_APOIO;
-            const prefix = visActive ? 'visitas' : 'apoio';
-            const state = load(storageKey, { items: [] });
-            if (!state.items.length) { alert('Não há dados para exportar nesta aba.'); return; }
-            const headers = ['Data', 'Mês', 'Professores', 'Escola', 'Tema', 'Observações'];
-            const rows = state.items
-                .sort((a, b) => (a.data || '').localeCompare(b.data || ''))
-                .map(it => [
-                    (it.data ? (() => { const d = new Date(it.data + 'T00:00:00'); return String(d.getDate()).padStart(2, '0') + '/' + String(d.getMonth() + 1).padStart(2, '0') + '/' + d.getFullYear() })() : ''),
-                    (it.data ? PT_BR_MESES[new Date(it.data + 'T00:00:00').getMonth()] : ''),
-                    it.professores || '', it.escola || '', it.tema || '', it.obs || ''
-                ]);
-            const csv = [headers, ...rows].map(r => r.map(x => '"' + String(x).replace(/"/g, '""') + '"').join(',')).join('\n');
-            const blob = new Blob(["\ufeff" + csv], { type: 'text/csv;charset=utf-8;' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a'); a.href = url; a.download = `${prefix}.csv`; a.click(); URL.revokeObjectURL(url);
+      document.getElementById("btnExportCsv").addEventListener("click", () => {
+        const visActive =
+          document.getElementById("sec-visitas").style.display !== "none";
+        const storageKey = visActive ? K_VISITAS : K_APOIO;
+        const prefix = visActive ? "visitas" : "apoio";
+        const state = load(storageKey, { items: [] });
+        if (!state.items.length) {
+          alert("Sem dados para exportar nesta aba.");
+          return;
+        }
+        const headers = [
+          "Data",
+          "Mês",
+          "Professores",
+          "Escola",
+          "Tema",
+          "Observações",
+        ];
+        const rows = state.items
+          .sort((a, b) => (a.data || "").localeCompare(b.data || ""))
+          .map((it) => [
+            it.data ? fmtDate(it.data) : "",
+            it.data
+              ? PT_BR_MESES[new Date(it.data + "T00:00:00").getMonth()]
+              : "",
+            it.professores || "",
+            it.escola || "",
+            it.tema || "",
+            it.obs || "",
+          ]);
+        const csv = [headers, ...rows]
+          .map((r) =>
+            r.map((x) => '"' + String(x).replace(/"/g, '""') + '"').join(","),
+          )
+          .join("\n");
+        const blob = new Blob(["\ufeff" + csv], {
+          type: "text/csv;charset=utf-8;",
         });
-        document.getElementById('printPage').addEventListener('click', () => window.print());
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = prefix + ".csv";
+        a.click();
+        URL.revokeObjectURL(url);
+      });
+      document
+        .getElementById("btnPrint")
+        .addEventListener("click", () => window.print());
     </script>
-</body>
-
+  </body>
 </html>
-
